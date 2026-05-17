@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KU Lighthouse — Q1 2026 Quarterly Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// Apply report font globally to all Chart.js instances
+document.addEventListener('DOMContentLoaded', function() {
+  Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+  Chart.defaults.font.size = 11;
+});
+</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Playfair+Display:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 13px; }
+body { font-family: 'IBM Plex Sans', sans-serif; background: #fff; color: #1c1c1c; line-height: 1.5; }
+
+:root {
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --ink:       #122947;
+  --mid:       #4a5568;
+  --soft:      #8a94a6;
+  --rule:      #e6eaf0;
+  --bg:        #f6f8fb;
+  --accent:    #197f8e;
+  --green:     #2d7a3a;
+  --green-bg:  #e6f2e8;
+  --amber:     #c47a10;
+  --amber-bg:  #fdf3dc;
+  --red:       #c0392b;
+  --red-bg:    #fdecea;
+  --purple:    #5b21b6;
+  --purple-bg: #ede9fe;
+  --science:   #2d7a3a;
+  --sund:      #425570;
+  --hum:       #197f8e;
+  --samf:      #d4843e;
+  --law:       #ffbd38;
+  --theo:      #c73028;
+  --ssh:        #197f8e;
+  --ext:       #666666;
+}
+
+/* ─── COVER ─── */
+.cover { background: var(--ink); padding: 56px 60px 48px; position: relative; overflow: hidden; }
+.cover::before { content:''; position:absolute; right:-120px; top:-120px; width:480px; height:480px; border-radius:50%; border:1px solid rgba(255,255,255,.05); }
+.cover::after { content:''; position:absolute; right:60px; top:60px; width:280px; height:280px; border-radius:50%; border:1px solid rgba(255,255,255,.04); }
+.cover-eyebrow { font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,255,255,.38); margin-bottom:16px; }
+.cover h1 { font-family:'Playfair Display',Georgia,serif; font-size:52px; font-weight:400; line-height:1.08; color:#fff; }
+.cover h1 span { color:#DB3B0A; }
+.cover-meta { display:flex; gap:24px; margin-top:28px; flex-wrap:wrap; }
+.cover-pill { font-size:10px; color:rgba(255,255,255,.5); border:1px solid rgba(255,255,255,.12); border-radius:20px; padding:4px 14px; }
+.cover-note { margin-top:24px; font-size:11px; color:rgba(255,255,255,.28); border-top:1px solid rgba(255,255,255,.06); padding-top:16px; }
+
+/* ─── LAYOUT ─── */
+.body-wrap { max-width:960px; margin:0 auto; padding:0 60px; }
+.section { padding:32px 0 0; }
+.section + .section { margin-top:32px; }
+.section-eyebrow { font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:var(--soft); display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+.section-eyebrow::after { content:''; flex:1; height:1px; background:var(--rule); }
+h2.section-title { font-family:'Playfair Display',Georgia,serif; font-size:22px; font-weight:400; color:var(--ink); margin-bottom:4px; }
+.section-sub { font-size:12px; color:var(--soft); margin-bottom:18px; }
+
+/* ─── KPI CARDS ─── */
+.scorecard { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px; margin-bottom:10px; }
+.scorecard-auto { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px; margin-bottom:10px; align-items:stretch; }
+.scorecard-auto .kpi { display:flex; flex-direction:column; }
+.scorecard-auto .kpi .kpi-vs { margin-top:auto; }
+.scorecard-3 { grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); }
+.scorecard-2 { grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); }
+.kpi { background:var(--bg); border-radius:10px; padding:16px 16px 14px; position:relative; }
+.kpi-label { font-size:10px; color:var(--soft); line-height:1.35; margin-bottom:8px; }
+.kpi-value { font-family:'Playfair Display',serif; font-size:34px; font-weight:400; color:var(--ink); line-height:1; }
+.kpi-value.up { color:var(--green); }
+.kpi-value.watch { color:var(--amber); }
+.kpi-sub { font-size:10px; color:var(--soft); margin-top:5px; }
+.kpi-badge { position:absolute; top:10px; right:10px; font-size:8px; padding:2px 7px; border-radius:8px; font-weight:500; }
+.badge-new { background:var(--green-bg); color:var(--green); }
+.badge-q1 { background:var(--purple-bg); color:var(--purple); }
+.badge-watch { background:var(--amber-bg); color:var(--amber); }
+.kpi-vs .up { color:var(--green); font-weight:500; font-size:10px; }
+.kpi-vs .dn { color:var(--red); font-weight:500; font-size:10px; }
+.kpi-vs .na { color:var(--soft); font-size:10px; }
+
+/* ─── EXEC SUMMARY ─── */
+.obs-list { background:var(--bg); border-radius:12px; padding:20px 24px; }
+.obs-item { display:flex; gap:14px; padding:12px 0; border-bottom:1px solid var(--rule); }
+.obs-item:last-child { border-bottom:none; padding-bottom:0; }
+.obs-item:first-child { padding-top:0; }
+.obs-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:6px; background:#122947; }
+.dot-g { background:var(--green); }
+.dot-a { background:var(--amber); }
+.dot-b { background:var(--accent); }
+.dot-p { background:var(--purple); }
+.obs-body { font-size:12px; line-height:1.7; color:var(--mid); }
+.obs-body strong { color:var(--ink); font-weight:600; }
+.obs-body .tag { font-size:10px; background:#fff; border:1px solid var(--rule); border-radius:6px; padding:1px 6px; color:var(--soft); margin-left:4px; }
+
+/* ─── HORIZONTAL BAR CHART ─── */
+.hbar-chart { margin-top:4px; }
+.hbar-row { display:flex; align-items:center; gap:10px; margin-bottom:7px; }
+.hbar-label { font-size:10px; color:var(--soft); width:105px; flex-shrink:0; text-align:right; line-height:1.3; }
+.hbar-label-wide { width:155px; }
+.hbar-track { flex:1; height:8px; background:#edf2f7; border-radius:4px; overflow:hidden; }
+.hbar-fill { height:100%; border-radius:4px; }
+.hbar-val { font-size:11px; font-weight:500; color:var(--ink); width:72px; text-align:right; font-family:'IBM Plex Mono',monospace; white-space:nowrap; }
+.hbar-val.soft { color:var(--soft); }
+
+/* ─── STACKED BAR ─── */
+.stacked-track { display:flex; height:10px; border-radius:5px; overflow:hidden; }
+.fak-legend { display:flex; gap:12px; flex-wrap:wrap; font-size:10px; color:var(--soft); margin-top:8px; }
+.fak-legend span { display:flex; align-items:center; gap:5px; }
+.fak-legend i { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+/* ─── PROGRAMME TABLE ─── */
+.prog-table { width:100%; border-collapse:collapse; font-size:12px; font-family:'DM Sans', sans-serif; }
+.prog-table thead th { text-align:right; font-size:10px; font-weight:500; color:var(--soft); padding:6px 8px 8px; border-bottom:1px solid var(--rule); }
+.prog-table thead th:first-child { text-align:left; }
+.prog-table tbody td { padding:10px 8px; border-bottom:1px solid var(--rule); color:var(--mid); text-align:right; vertical-align:middle; }
+.prog-table tbody td:first-child { text-align:left; color:var(--ink); font-weight:500; background:#fff; position:sticky; left:0; z-index:1; }
+.prog-table thead th:first-child { background:#fff; position:sticky; left:0; z-index:2; }
+.prog-table tbody tr:last-child td { border-bottom:none; }
+.prog-table tfoot td { padding:8px 8px; font-weight:600; color:var(--ink); border-top:1px solid var(--rule); text-align:right; }
+.prog-table tfoot td:first-child { text-align:left; background:#fff; position:sticky; left:0; }
+@media (max-width:600px) {
+  .prog-table .type-n, .prog-table .type-e { display:none; }
+}
+.type-n { background:#fde8e1; color:#DB3B0A; font-size:9px; padding:2px 7px; border-radius:8px; font-weight:500; display:inline-block; margin-left:5px; margin-bottom:3px; }
+.type-e { background:#e8eef5; color:#122947; font-size:9px; padding:2px 7px; border-radius:8px; font-weight:500; display:inline-block; margin-left:5px; margin-bottom:3px; }
+.type-emp { background:#d1fae5; color:#065f46; font-size:9px; padding:2px 7px; border-radius:8px; font-weight:500; display:inline-block; margin-left:5px; }
+
+/* ─── EVENTS TABLE ─── */
+.evt-table { width:100%; border-collapse:collapse; font-size:12px; }
+.evt-table thead th { text-align:left; font-size:10px; font-weight:500; color:var(--soft); padding:6px 8px 8px; border-bottom:1px solid var(--rule); }
+.evt-table thead th:last-child { text-align:right; }
+.evt-table tbody td { padding:8px 8px; border-bottom:1px solid var(--rule); color:var(--mid); vertical-align:middle; }
+.evt-table tbody td:first-child { color:var(--soft); font-size:10px; font-family:'IBM Plex Mono'; width:56px; }
+.evt-table tbody td:last-child { text-align:right; font-weight:600; color:var(--ink); font-family:'IBM Plex Mono'; }
+.evt-table tbody tr:last-child td { border-bottom:none; }
+.evt-name { color:var(--ink); font-size:12px; }
+.evt-mgr { font-size:10px; color:var(--soft); }
+
+/* ─── GENDER ─── */
+.gender-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.gender-card { background:var(--bg); border-radius:10px; padding:14px 16px; }
+.gc-title { font-size:11px; font-weight:500; color:var(--ink); margin-bottom:10px; }
+.gc-bar-wrap { display:flex; height:6px; border-radius:3px; overflow:hidden; margin-bottom:10px; }
+.gc-row { display:flex; justify-content:space-between; font-size:11px; color:var(--soft); padding:2px 0; }
+.gc-row span { font-weight:500; color:var(--ink); font-family:'IBM Plex Mono'; }
+
+/* ─── TWO/THREE COL ─── */
+.two-col { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:20px; }
+.q2-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media (max-width:600px) { .q2-grid { grid-template-columns:1fr; } }
+.three-col { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; }
+
+/* ─── INSIGHT BOXES ─── */
+.insight { border-left:3px solid #2563a8; padding:12px 16px; background:#e8f0f8; border-radius:0 8px 8px 0; font-size:12px; color:var(--mid); line-height:1.65; margin-top:12px; }
+.insight strong { color:var(--ink); }
+.insight-amber { border-left-color:var(--amber); background:var(--amber-bg); }
+.insight-green { border-left-color:var(--green); background:var(--green-bg); }
+.insight-purple { border-left-color:var(--purple); background:var(--purple-bg); }
+
+/* ─── CARD ─── */
+.card { background:var(--bg); border-radius:10px; padding:16px 18px; }
+.card-title { font-size:10px; font-weight:500; color:var(--soft); text-transform:uppercase; letter-spacing:.08em; margin-bottom:12px; }
+
+/* ─── DATA TABLE ─── */
+.data-table { width:100%; border-collapse:collapse; font-size:11px; }
+.data-table th { text-align:left; font-size:10px; font-weight:500; color:var(--soft); padding:5px 8px 7px; border-bottom:1px solid var(--rule); }
+.data-table td { padding:6px 8px; border-bottom:1px solid #f3f5f8; color:var(--mid); }
+.data-table td:first-child { color:var(--ink); }
+.data-table tr:last-child td { border-bottom:none; }
+.data-table .num { text-align:right; font-family:'IBM Plex Mono'; font-size:11px; font-weight:500; color:var(--ink); }
+.data-table .soft { color:var(--soft); font-weight:400; }
+.data-table tfoot td { font-weight:600; color:var(--ink); border-top:1px solid var(--rule); padding-top:7px; }
+
+/* ─── CHAPTER BREAK ─── */
+.chapter { background:var(--ink); padding:28px 60px 24px; margin:40px -60px 0; }
+.chapter-pre { font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:rgba(255,255,255,.3); margin-bottom:6px; }
+.chapter h2 { font-family:'Playfair Display',serif; font-size:26px; font-weight:400; color:#fff; }
+.chapter-sub { font-size:11px; color:rgba(255,255,255,.35); margin-top:6px; }
+
+/* ─── FOOTER ─── */
+.footer { background:var(--ink); padding:24px 60px; margin:48px -60px 0; }
+.footer p { font-size:10px; color:rgba(255,255,255,.28); line-height:1.9; }
+
+/* ─── STATUS PILL ─── */
+.status { font-size:9px; padding:2px 8px; border-radius:8px; font-weight:500; display:inline-block; }
+.st-track { background:var(--green-bg); color:var(--green); }
+.st-watch { background:var(--amber-bg); color:var(--amber); }
+.st-new  { background:var(--purple-bg); color:var(--purple); }
+
+/* ─── DIVIDER ─── */
+.divider { height:1px; background:var(--rule); margin:20px 0; }
+
+/* ─── ACAD LEVEL VISUAL ─── */
+.acad-row { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+.acad-label { font-size:10px; color:var(--soft); width:140px; flex-shrink:0; text-align:right; }
+.acad-track { flex:1; height:8px; background:#edf2f7; border-radius:4px; overflow:hidden; }
+.acad-fill { height:100%; border-radius:4px; }
+.acad-val { font-size:11px; font-weight:500; color:var(--ink); width:36px; text-align:right; font-family:'IBM Plex Mono'; }
+
+/* ─── FUNNEL ─── */
+.funnel-step { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; justify-content:flex-end; }
+.funnel-bar { border-radius:4px 4px 0 0; width:100%; }
+.funnel-num { font-size:26px; font-family:'Playfair Display',serif; color:var(--ink); line-height:1; margin-top:4px; }
+.funnel-num.watch { color:var(--amber); }
+.funnel-lbl { font-size:10px; color:var(--soft); text-align:center; line-height:1.3; }
+.funnel-labels { display:flex; gap:6px; margin-top:8px; }
+@media (max-width:480px) { .funnel-labels { display:none; } }
+
+/* ─── USER PLATFORM CARD ─── */
+.platform-card { background:var(--bg); border-radius:12px; padding:18px 20px; }
+.platform-big { font-family:'Playfair Display',serif; font-size:44px; color:var(--ink); line-height:1; }
+.platform-big.up { color:var(--green); }
+
+@media print {
+  body { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .chapter { margin:40px 0 0; }
+  .footer { margin:48px 0 0; }
+}
+
+/* ─── HEAT GRID (faculty matrix) ─── */
+.heat-grid { display: grid; grid-template-columns: 148px repeat(6,1fr); gap: 3px; font-size: 10px; margin-top: 12px; }
+.heat-grid .hg-header { background: var(--bg); border-radius: 4px; padding: 7px 4px; text-align: center; color: var(--soft); font-weight: 500; font-size: 9px; line-height: 1.35; }
+.heat-grid .hg-label  { padding: 7px 10px 7px 0; color: var(--mid); font-weight: 500; display: flex; align-items: center; font-size: 11px; }
+.heat-grid .hg-cell   { border-radius: 4px; padding: 7px 4px; text-align: center; font-family: 'IBM Plex Mono'; font-weight: 600; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+.heat-0  { background: #eef0f4; color: #c0c8d4; font-weight: 400; }
+.heat-1  { background: #cce8ea; color: #0a5963; }
+.heat-2  { background: #a8d4d8; color: #0a5963; }
+.heat-3  { background: #7abcc4; color: #fff; }
+.heat-5  { background: #3d8a94; color: #fff; }
+.heat-hi { background: #3d8a94; color: #fff; }
+.heat-total { background: #0a5963; color: #fff; border-radius: 4px; }
+.ind-sep { font-size: 9px; letter-spacing: .13em; text-transform: uppercase; color: var(--soft); display: flex; align-items: center; gap: 10px; margin: 28px 0 14px; }
+.ind-sep::after { content: ''; flex: 1; height: 1px; background: var(--rule); display: inline-block; }
+.ind-badge { background: var(--bg); border-radius: 6px; padding: 2px 8px; font-family: 'IBM Plex Mono'; font-size: 9px; letter-spacing: 0; text-transform: none; color: var(--mid); flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-eyebrow">UCPH Lighthouse — Innovation Center</div>
+  <h1>Quarterly Report<br><span>Q1</span> 2026</h1>
+  <div class="cover-meta">
+    <span class="cover-pill">Key Performance Indicators</span>
+    <span class="cover-pill">January – March 2026</span>
+    <span class="cover-pill">Nurture · Engage · Empower</span>
+    <span class="cover-pill">Internal — Management &amp; Teams</span>
+    <span class="cover-pill">Data per 31 March 2026</span>
+  </div>
+  <div class="cover-note">UCPH Lighthouse enhances innovation and entrepreneurship across the university. We foster ideas and solutions for the benefit of people, society and the environment. This report covers UCPH Lighthouse's three activity tracks: Nurture, Engage and Empower. Q1 2026 is the first quarter with the new KPI framework.</div>
+</div>
+
+<div class="body-wrap">
+
+<!-- ══════════ 1. EXECUTIVE SUMMARY ══════════ -->
+<div class="section">
+  <div class="section-eyebrow">Executive Summary</div>
+  <h2 class="section-title">Q1 2026 — Key Learnings from UCPH Lighthouse</h2>
+  <p class="section-sub">Q1 2026 is the first quarter with the new KPI framework — comparisons to 2025 should be read with this context in mind.</p>
+  <div class="obs-list">
+    <div class="obs-item">
+      <div class="obs-dot"></div>
+      <div class="obs-body">
+        <strong>Curricular capacity building and student outreach — Lighthouse content is being embedded in curricular courses, but faculty breadth is not yet there.</strong> 414 students in Lighthouse-supported curricular courses, with a strong lead from Science followed by Humanities. Health is underway but at 19% of its 2025 level. Social Sciences, Law and Theology are not yet represented in Lighthouse-supported courses. 102 educators in capacity building activities is an important first step towards embedding innovation more broadly across faculties. 5 out of 6 faculties are represented in student awareness activities and leads, indicating a student pipeline across disciplines in extracurricular activities.
+      </div>
+    </div>
+    <div class="obs-item">
+      <div class="obs-dot"></div>
+      <div class="obs-body">
+        <strong>Active Engagement — Indicated growth in community and programmes, but 70% of participants are from outside UCPH.</strong> 277 participants accepted across 5 programmes — primarily students, with SPARK Denmark as the exception. Gender balance is healthy across programmes (48% female). 70% of participants come from outside UCPH — a pattern that should be strategically addressed for the right balance in light of the ambition for broader participation across faculties and disciplines. 18 events with 409 sign-ups — the three largest events accounted for 58% of all reach, which raises questions about the format and reach of smaller events.
+      </div>
+    </div>
+    <div class="obs-item">
+      <div class="obs-dot"></div>
+      <div class="obs-body">
+        <strong>Research Commercialisation — Strong start across early pipeline stages; faculty breadth is growing.</strong> IDFs filed, PoC applications received and PoC projects funded are all well underway relative to 2025 — InnoExplore has funded 4 projects against 5 for all of 2025. Health and Science still dominate the overall pipeline, but Humanities (8 leads, 4 PoC) and Law (1 PoC) show signs of broader engagement across disciplines. Licences and spin-outs are low — seasonality is expected, but the trajectory deserves attention at Q2.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 2. TOP-LINE KPIs ══════════ -->
+<div class="section">
+  <div class="section-eyebrow">Key Performance Indicators — Q1 2026</div>
+  <h2 class="section-title">Performance at a glance</h2>
+  <p class="section-sub">Key numbers across all three tracks. Green = at or above 25% of 2025 baseline. Amber = below or no baseline yet.</p>
+
+  <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:12px;font-family:'DM Sans',sans-serif">
+      <thead>
+        <tr style="font-size:10px;color:var(--soft);font-weight:500;border-bottom:2px solid var(--rule)">
+          <th style="text-align:left;padding:8px 10px">Indicator</th>
+          <th style="text-align:right;padding:8px 10px">Q1 2026</th>
+          <th style="text-align:right;padding:8px 10px">2025 baseline</th>
+          <th style="text-align:right;padding:8px 10px">% of baseline</th>
+          <th style="text-align:left;padding:8px 10px">Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Nurture -->
+        <tr style="background:var(--bg)">
+          <td colspan="5" style="padding:6px 10px;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)">Nurture — Innovation Capacity Building and Awareness</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">Students in curricular courses</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--green)">414</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--mid)">869</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--green);font-weight:500">48%</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px">*</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">ECTS projects</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--green)">13</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--mid)">43</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--green);font-weight:500">30%</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px"></td>
+        </tr>
+
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">Educators in capacity building</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--ink)">102</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--soft)">—</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--soft)">—</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px">*</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">Student awareness reach</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--amber)">229</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--mid)">1,423</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--amber);font-weight:500">16%</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px">*</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">Student leads</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--green)">27</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--mid)">95</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--green);font-weight:500">28%</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px">*</td>
+        </tr>
+
+        <!-- Engage -->
+        <tr style="background:var(--bg)">
+          <td colspan="5" style="padding:6px 10px;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)">Engage — Active Engagement</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">Student users</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--green)">631</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--mid)">519</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--green);font-weight:500">↑ +22%</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px">* Users on digital platform incl. researchers/others</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">Student startup-projects</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--green)">411</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--mid)">355</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--green);font-weight:500">↑ +16%</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px">* Startups on digital platform</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">Student startups with CVR</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--amber)">2</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--mid)">11</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--amber);font-weight:500">18%</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px">* CVRs created in the given period</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">Event sign-ups</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--ink)">571</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--soft)">—</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--soft)">—</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px">Incl. Community Breakfast (162)</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">Programme participants</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--ink)">277</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--mid)">478</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--soft)">—</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px">Accepted across 5 active programmes</td>
+        </tr>
+
+        <!-- Empower -->
+        <tr style="background:var(--bg)">
+          <td colspan="5" style="padding:6px 10px;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--soft)">Empower — Research Innovation Pipeline</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">Innovation leads</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--ink)">82</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--soft)">—</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--soft)">—</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px"></td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">IDFs filed</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--green)">28</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--mid)">66</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--green);font-weight:500">42%</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px"></td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">PoC projects funded</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--green)">20</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--mid)">60</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--green);font-weight:500">33%</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px"></td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--rule)">
+          <td style="padding:7px 10px;color:var(--ink)">Licences signed</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--amber)">2</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--mid)">25</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--amber);font-weight:500">8%</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px">Tend to close unevenly</td>
+        </tr>
+        <tr>
+          <td style="padding:7px 10px;color:var(--ink)">Spin-outs formed</td>
+          <td style="text-align:right;padding:7px 10px;font-weight:700;color:var(--amber)">0</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--mid)">7</td>
+          <td style="text-align:right;padding:7px 10px;color:var(--amber);font-weight:500">0%</td>
+          <td style="padding:7px 10px;color:var(--soft);font-size:11px">Tend to close unevenly</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:10px;color:var(--soft);margin-top:8px">Green = at or above 25% of 2025 total total (on pace for the year). Amber = below pace or no baseline. Platform metrics (users, projects) are cumulative — % shows growth vs. 2025 end. Programme participants not pace-comparable (different programmes active per quarter).</p>
+  <p style="font-size:10px;color:var(--soft);margin-top:4px">* Data quality not marked as high for these indicators — see data recommendation boxes in the relevant sections for details on limitations.</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:20px;margin-top:16px">
+  <div class="card">
+    <div class="card-title">Questions for Q2 Review</div>
+    <div style="font-size:11px;color:var(--mid);line-height:2">
+      <div><span style="color:var(--amber)">●</span> Health curricular reach at 19% of 2025 — are courses planned for Q2?</div>
+      <div><span style="color:var(--amber)">●</span> 70% of programme participants are non-UCPH — is this the right balance?</div>
+      <div><span style="color:var(--amber)">●</span> WorkSessions: 7 events, only 19 sign-ups — should the format be reviewed?</div>
+      <div><span style="color:var(--amber)">●</span> Licences (2) and spin-outs (0) — will pace recover in Q2?</div>
+      <div><span style="color:var(--amber)">●</span> Social Sciences, Law and Theology absent from curricula — intentional?</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Data Gaps to Close in Q2</div>
+    <div style="font-size:11px;color:var(--mid);line-height:2">
+      <div><span style="color:var(--amber)">●</span> Curricular courses: tracked by intervention, not unique courses — manual adjustment applied</div>
+      <div><span style="color:var(--amber)">●</span> Student leads: clear definition and data structure needed</div>
+      <div><span style="color:var(--amber)">●</span> Educators capacity building: track as unique individuals across activities</div>
+      <div><span style="color:var(--amber)">●</span> Platform: active/inactive users and academic level not separated</div>
+      <div><span style="color:var(--amber)">●</span> CVR startup tracking: methodology to be established</div>
+      <div><span style="color:var(--amber)">●</span> Events: Empower and Support team data not systematically included</div>
+      <div><span style="color:var(--amber)">●</span> Programme applicants: individual and team applications not separated in source data</div>
+      <div><span style="color:var(--amber)">●</span> Lighthouse Launch: academic level not collected</div>
+      <div><span style="color:var(--amber)">●</span> Open Entrepreneurship: no formal application process — will always appear as zero in programmes</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════ CHAPTER: NURTURE ══════════ -->
+<div class="chapter">
+  <div class="chapter-pre">Chapter 1 — Nurture</div>
+  <h2>Innovation Capacity Building &amp; Awareness</h2>
+</div>
+
+<div class="section" style="padding-top:28px">
+  <div class="section-eyebrow">Students in Curricular Courses</div>
+  <h2 class="section-title">Students reached in Lighthouse-supported curricular courses</h2>
+  <p class="section-sub">
+    <strong>What this measures:</strong> Students participating in university courses with Lighthouse-supported innovation or entrepreneurship content.
+  </p>
+
+  <div class="scorecard-2 scorecard" style="margin-bottom:18px">
+    <div class="kpi">
+      <div class="kpi-label">Students in curricular courses</div>
+      <div class="kpi-value up">414</div>
+      <div class="kpi-sub">2025 total: 869 · 48% reached in Q1</div>
+    </div>
+  </div>
+
+  <p class="section-sub" style="margin-top:-10px">The chart below shows 2025 total totals (muted) alongside 2026 Q1 (solid) per faculty. Figures reflect course capacity, not guaranteed attendance, and may be a slight overestimate of actual reach.</p>
+
+  <!-- Bar chart: 2025 total vs Q1 2026 by faculty -->
+  <div style="position:relative;width:100%;height:260px;margin-bottom:4px">
+    <canvas id="chartCurriculum" role="img" aria-label="Students in curricular courses by faculty: 2025 vs Q1 2026">Health: 348/65. Science: 256/279. HUM: 100/70. SAMF: 105/0. Law: 0/0. Theology: 0/0. UCPH: 60/0.</canvas>
+  </div>
+  <div style="display:flex;gap:16px;margin-bottom:16px;flex-wrap:wrap">
+    <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--soft)"><span style="width:10px;height:10px;border-radius:2px;background:#8ec8a8;display:inline-block"></span> 2025 total</span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--soft)"><span style="width:10px;height:10px;border-radius:2px;background:#2d7a3a;display:inline-block"></span> Q1 2026</span>
+  </div>
+  <script>
+  (function(){
+    var gc='rgba(128,128,128,0.1)', tc='rgba(120,120,120,0.75)';
+    new Chart(document.getElementById('chartCurriculum'), {
+      type: 'bar',
+      data: {
+        labels: ['Health', 'Science', 'Humanities', 'Social Sciences', 'Law', 'Theology', 'UCPH Across'],
+        datasets: [
+          {
+            label: '2025 total',
+            data: [348, 256, 100, 105, 0, 0, 60],
+            backgroundColor: ['#c4a3e8','#8ec8a8','#8ab4e8','#dca86b','#f8dfa0','#c4a3b8','#c8d0d8'],
+            borderWidth: 0,
+          },
+          {
+            label: 'Q1 2026',
+            data: [65, 279, 70, 0, 0, 0, 0],
+            backgroundColor: ['#425570','#2d7a3a','#197f8e','#d4843e','#ffbd38','#666666','#666666'],
+            borderWidth: 0,
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+        scales: {
+          x: { grid: { color: gc }, ticks: { color: tc, font: { size: 11 } }, border: { display: false } },
+          y: { min: 0, grid: { color: gc }, ticks: { color: tc, font: { size: 11 } }, title: { display: true, text: 'Students', color: tc, font: { size: 10 } }, border: { display: false } }
+        }
+      }
+    });
+  })();
+  </script>
+
+  <div class="insight insight-green" style="margin-top:12px">
+    <strong>Q1 2026 is off to a strong start</strong>, driven by Science and Humanities. Science reached 279 students — already 109% of its full 2025 total (256). Humanities reached 70 students, 70% of its 2025 total (100) with three quarters still to go. Whether this momentum holds depends on courses being planned for the remaining quarters, particularly for Health and Social Sciences.
+  </div>
+
+  <div class="insight insight-amber" style="margin-top:8px">
+    <strong>Health, Social Sciences, Law and Theology require follow-up.</strong> Health is at just 19% of its 2025 total (65 of 348) — likely explained by course scheduling later in the year, but needs verification. Social Sciences is at 0% so far (vs. 105 in 2025). Law and Theology had no curriculum reach in either 2025 or Q1 2026 — worth discussing whether this is a deliberate strategic choice or an unaddressed gap.
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-eyebrow">ECTS Projects &amp; Curricular Courses by Faculty</div>
+  <h2 class="section-title">Curricular Course and ECTS-project distribution</h2>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Curricular Courses</div>
+      <div style="font-family:'Playfair Display',serif;font-size:32px;color:var(--ink);margin-bottom:4px">10</div>
+      <div style="font-size:11px;color:var(--soft);margin-bottom:12px">2025 total: 26 · 38% reached in Q1</div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;font-size:9px;color:var(--soft);margin-bottom:4px;padding-right:2px">
+        <span>Q1 '26 / 2025</span>
+      </div>
+      <div class="hbar-chart">
+        <div class="hbar-row">
+          <div class="hbar-label">Science</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:50%;background:var(--science)"></div></div>
+          <div class="hbar-val">5 <span style="color:var(--soft);font-size:9px">/ 6</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Humanities</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:30%;background:var(--hum)"></div></div>
+          <div class="hbar-val">3 <span style="color:var(--soft);font-size:9px">/ 4</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Health</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:20%;background:var(--sund)"></div></div>
+          <div class="hbar-val">2 <span style="color:var(--soft);font-size:9px">/ 13</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Social Sciences</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:0%;background:var(--samf)"></div></div>
+          <div class="hbar-val" style="color:var(--soft)">0 <span style="font-size:9px">/ 2</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Law</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:0%;background:var(--law)"></div></div>
+          <div class="hbar-val" style="color:var(--soft)">0 <span style="font-size:9px">/ 0</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Theology</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:0%;background:var(--theo)"></div></div>
+          <div class="hbar-val" style="color:var(--soft)">0 <span style="font-size:9px">/ 0</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">ECTS Projects</div>
+      <div style="font-family:'Playfair Display',serif;font-size:32px;color:var(--ink);margin-bottom:4px">13</div>
+      <div style="font-size:11px;color:var(--soft);margin-bottom:12px">2025 total: 43 · 30% reached in Q1</div>
+      <div style="display:flex;justify-content:flex-end;gap:8px;font-size:9px;color:var(--soft);margin-bottom:4px;padding-right:2px">
+        <span>Q1 '26 / 2025</span>
+      </div>
+      <div class="hbar-chart">
+        <div class="hbar-row">
+          <div class="hbar-label">Humanities</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:54%;background:var(--hum)"></div></div>
+          <div class="hbar-val">7 <span style="color:var(--soft);font-size:9px">/ 7</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Science</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:23%;background:var(--science)"></div></div>
+          <div class="hbar-val">3 <span style="color:var(--soft);font-size:9px">/ 18</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Social Sciences</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:23%;background:var(--samf)"></div></div>
+          <div class="hbar-val">3 <span style="color:var(--soft);font-size:9px">/ 6</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Health</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:0%;background:var(--sund)"></div></div>
+          <div class="hbar-val" style="color:var(--soft)">0 <span style="font-size:9px">/ 11</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Theology</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:0%;background:var(--theo)"></div></div>
+          <div class="hbar-val" style="color:var(--soft)">0 <span style="font-size:9px">/ 1</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Law</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:0%;background:var(--law)"></div></div>
+          <div class="hbar-val" style="color:var(--soft)">0 <span style="font-size:9px">/ 0</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="insight" style="margin-top:12px">
+    <strong>Humanities is the only faculty to have matched its full 2025 ECTS total in Q1 alone (7/7).</strong> Science and Social Sciences are tracking at 3 projects each, but both have significant room relative to 2025 (18 and 6 respectively). Health's drop from 11 ECTS projects in 2025 to 0 in Q1 mirrors its curricular course decline — likely the same scheduling explanation, but warrants the same follow-up.
+  </div>
+  <div class="insight insight-purple" style="margin-top:8px">
+    <strong>Data recommendation:</strong> The underlying data collection for curricular courses and student participants are structured around interventions rather than unique courses and student participants. Current numbers have been manually adjusted to avoid double-counting. Recommendation: restructure data collection to track unique courses and students per course, which will simplify reporting and improve data reliability going forward. Explore whether data can be pulled directly from the course catalogue.
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-eyebrow">Educators in Capacity Building Activities</div>
+  <h2 class="section-title">Scaling innovation capacities through educators — new activity</h2>
+  <p class="section-sub">Counts educators participating in Lighthouse-supported innovation or entrepreneurship capacity building activities. This is an amplifier for curriculum reach: trained educators carry the content into their own courses independently.</p>
+
+  <div class="scorecard-3 scorecard" style="margin-bottom:0">
+    <div class="kpi">
+      <div class="kpi-label">Educators in capacity building</div>
+      <div class="kpi-value up">102</div>
+      <div class="kpi-sub">Q1 2026 — first data point</div>
+    </div>
+    <div class="kpi" style="grid-column:span 2">
+      <div class="kpi-label" style="margin-bottom:10px">Why this matters alongside curriculum numbers</div>
+      <div style="font-size:12px;color:var(--mid);line-height:1.7">
+        Where the curriculum indicators count students reached <em>directly</em> by Lighthouse, this indicator captures the <strong style="color:var(--ink)">indirect reach</strong> — educators who take Lighthouse content and deliver it independently in their own courses. 102 educators in a single quarter is a meaningful number: even if each reaches 20 students, that is a potential 2,000 additional students not captured elsewhere in the data.
+      </div>
+    </div>
+  </div>
+
+  <div class="insight insight-purple" style="margin-top:12px">
+    <strong>Data recommendation:</strong> Start tracking faculty and new vs. recurring split. This will allow the team to see whether capacity building is deepening engagement with already-active faculties or broadening into new ones — a key strategic question as curriculum reach varies significantly across UCPH.
+  </div>
+</div>
+
+
+
+<div class="section">
+  <div class="section-eyebrow">Student Awareness &amp; Student Leads</div>
+  <h2 class="section-title">Sparking interest for students</h2>
+  <p class="section-sub">Awareness activities cover fairs, pop-ups and intro-presentations where the main purpose is to create awareness of Lighthouse and our service offers. Note that awareness can be created through other types of activities, but these are not included in the numbers.</p>
+
+  <div class="scorecard-auto" style="margin-bottom:20px">
+    <div class="kpi">
+      <div class="kpi-label">Student awareness reach</div>
+      <div class="kpi-value">229</div>
+      <div class="kpi-sub">2025 total: 1,423 · 16% reached in Q1</div>
+      <div class="kpi-vs"><span class="na">11 events · 2025: 25 events</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Student leads</div>
+      <div class="kpi-value up">27</div>
+      <div class="kpi-sub">2025 total: 95 · 28% reached in Q1</div>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-bottom:14px">
+    <div>
+      <p style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:4px">Student Awareness Reach by Faculty</p>
+      <p style="font-size:11px;color:var(--soft);margin-bottom:12px">Lighthouse-organised activities with the purpose of creating awareness among students. 11 activities reached 229 students, across 5 faculties.</p>
+      <div style="display:flex;justify-content:flex-end;gap:8px;font-size:9px;color:var(--soft);margin-bottom:4px;padding-right:2px">
+        <span>Q1 '26 / 2025</span>
+      </div>
+      <div class="hbar-chart">
+        <div class="hbar-row">
+          <div class="hbar-label">UCPH Across</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:61%;background:#666666"></div></div>
+          <div class="hbar-val">61 <span style="color:var(--soft);font-size:9px">/ 415</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Humanities</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:51%;background:var(--hum)"></div></div>
+          <div class="hbar-val">51 <span style="color:var(--soft);font-size:9px">/ 145</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Science</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:45%;background:var(--science)"></div></div>
+          <div class="hbar-val">45 <span style="color:var(--soft);font-size:9px">/ 456</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Health</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:43%;background:var(--sund)"></div></div>
+          <div class="hbar-val">43 <span style="color:var(--soft);font-size:9px">/ 240</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Social Sciences</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:23%;background:var(--samf)"></div></div>
+          <div class="hbar-val">23 <span style="color:var(--soft);font-size:9px">/ 92</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Law</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:6%;background:var(--law)"></div></div>
+          <div class="hbar-val">6 <span style="color:var(--soft);font-size:9px">/ 15</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Theology</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:0%;background:var(--theo)"></div></div>
+          <div class="hbar-val" style="color:var(--soft)">0 <span style="font-size:9px">/ 0</span></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:4px">Student Leads by Faculty</p>
+      <p style="font-size:11px;color:var(--soft);margin-bottom:12px">A lead is an intro meeting — a first step in the student pipeline where students actively seek out Lighthouse.</p>
+      <div style="display:flex;justify-content:flex-end;gap:8px;font-size:9px;color:var(--soft);margin-bottom:4px;padding-right:2px">
+        <span>Q1 '26 / 2025</span>
+      </div>
+      <div class="hbar-chart">
+        <div class="hbar-row">
+          <div class="hbar-label">Humanities</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:37%;background:var(--hum)"></div></div>
+          <div class="hbar-val">10 <span style="color:var(--soft);font-size:9px">/ 11</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Health</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:26%;background:var(--sund)"></div></div>
+          <div class="hbar-val">7 <span style="color:var(--soft);font-size:9px">/ 21</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Science</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:26%;background:var(--science)"></div></div>
+          <div class="hbar-val">7 <span style="color:var(--soft);font-size:9px">/ 30</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Social Sciences</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:7%;background:var(--samf)"></div></div>
+          <div class="hbar-val">2 <span style="color:var(--soft);font-size:9px">/ 5</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Theology</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:7%;background:var(--theo)"></div></div>
+          <div class="hbar-val">2 <span style="color:var(--soft);font-size:9px">/ 0</span></div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label">Law</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:0%;background:var(--law)"></div></div>
+          <div class="hbar-val" style="color:var(--soft)">0 <span style="font-size:9px">/ 5</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="insight">
+    <strong>Awareness and leads show broad reach across faculties.</strong> On average, Q1 2026 awareness activities reached 21 students per activity, compared to 57 per event across all of 2025 — likely reflecting Q1 seasonality rather than a structural change. Awareness reach and leads show good representation across faculties, which supports broader participation across faculties and disciplines in the innovation pipeline in the future. Humanities leads both awareness reach (51) and student leads (10) — suggesting awareness activities are converting to pipeline.
+  </div>
+
+  <div class="insight insight-purple" style="margin-top:8px">
+    <strong>Data recommendation:</strong> Student leads currently tracks Intro Meetings only. Open Lighthouse participants and email-based leads are not included — the former due to insufficient data quality on participant type and faculty, the latter due to lack of tracking infrastructure. Recommendation: establish a clear student lead definition and data structure that supports a consistent count going forward.
+  </div>
+</div>
+
+
+<!-- ══════════ CHAPTER: ENGAGE ══════════ -->
+<div class="chapter">
+  <div class="chapter-pre">Chapter 2 — Engage</div>
+  <h2>Active Engagement</h2>
+</div>
+
+<div class="section" style="padding-top:28px">
+  <div class="section-eyebrow">Student Users &amp; Startup-Projects (Platform)</div>
+  <h2 class="section-title">The Lighthouse digital ecosystem — Q1 2026 snapshot</h2>
+  <p class="section-sub">Platform users and startup-projects are cumulative platform metrics — not unique quarter-by-quarter participants. The Q1 2026 numbers represent the current state of the platform.</p>
+
+  <div class="two-col" style="margin-bottom:18px">
+    <div class="platform-card">
+      <div class="card-title">Student Users (platform)</div>
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px">
+        <div class="platform-big up">631</div>
+        <div style="font-size:13px;color:var(--green);font-weight:500">▲ +22%</div>
+      </div>
+      <div style="font-size:12px;color:var(--soft);margin-bottom:8px">2025 total: 519*</div>
+      <div style="font-size:10px;color:var(--soft);margin-bottom:10px;font-style:italic">* Some KU Innovators participants are missing from 2025 data (identified May 7) — growth may be overestimated.</div>
+      <p style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">By faculty — Q1 2026 vs. 2025</p>
+      <div class="hbar-chart">
+        <div class="hbar-row">
+          <div class="hbar-label" style="width:120px">Not from UCPH</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:33%;background:var(--ext)"></div></div>
+          <div class="hbar-val">208</div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label" style="width:120px">Science</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:30.6%;background:var(--science)"></div></div>
+          <div class="hbar-val">193</div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label" style="width:120px">Humanities</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:12.4%;background:var(--hum)"></div></div>
+          <div class="hbar-val">78</div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label" style="width:120px">Health</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:10.5%;background:var(--sund)"></div></div>
+          <div class="hbar-val">66</div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label" style="width:120px">Social Sciences</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:6.5%;background:var(--samf)"></div></div>
+          <div class="hbar-val">41</div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label" style="width:120px">Law</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:2.5%;background:var(--law)"></div></div>
+          <div class="hbar-val">16</div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-label" style="width:120px">Theology</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:1%;background:var(--theo)"></div></div>
+          <div class="hbar-val">6</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="platform-card">
+      <div class="card-title">Student Startup-Projects (platform)</div>
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px">
+        <div class="platform-big up">411</div>
+        <div style="font-size:13px;color:var(--green);font-weight:500">▲ +16%</div>
+      </div>
+      <div style="font-size:12px;color:var(--soft);margin-bottom:8px">2025 total: 355</div>
+      <div style="background:var(--rule);border-radius:6px;padding:8px 12px;margin-bottom:14px;font-size:11px">
+        <div style="font-weight:500;color:var(--ink);margin-bottom:4px">Student startups with CVR</div>
+        <div style="color:var(--mid)">Q1 2026: <strong style="color:var(--ink)">2</strong> &nbsp;·&nbsp; 2025 total: <strong style="color:var(--ink)">11</strong></div>
+        <div style="font-size:10px;color:var(--soft);margin-top:4px">* CVRs created in the given period</div>
+      </div>
+      <div class="insight insight-green" style="margin-top:0;font-size:11px">
+        <strong>The platform is growing.</strong> Student users grew by 112 (+22%) and student startup-projects by 56 (+16%) in Q1 2026. Both metrics show consistent forward momentum entering 2026. 33% of platform users (208 of 631) are not from UCPH.
+      </div>
+    </div>
+  </div>
+
+  <div class="insight insight-purple" style="margin-top:12px">
+    <strong>Data recommendation:</strong> The indicators are based on registered users on the platform, without clear differentiation between active and inactive users and academic level (e.g. students, researchers). As a result, the indicator names "Student users" and "Student startup-projects" may be somewhat misleading and may be overcounted. Furthermore, there is currently no robust methodology for tracking student startups with CVR registration — figures are manually collected and difficult to verify systematically. Recommendation: consider auditing the platform data to establish a standard for data collection and analysis — before using these numbers for strategic decision-making. A CVR data collection methodology should also be established.
+  </div>
+</div>
+
+<!-- ══════════ CHAPTER: EVENTS ══════════ -->
+<div class="chapter">
+  <div class="chapter-pre">Chapter 3 — Events</div>
+  <h2>Events &amp; Community Activities</h2>
+</div>
+
+<div class="section" style="padding-top:28px">
+  <div class="section-eyebrow">Events Q1 2026</div>
+  <h2 class="section-title">Engagement in UCPH Lighthouse events</h2>
+  <p class="section-sub">All events where KU Lighthouse hosted or co-hosted. Community Breakfast is tracked separately as a recurring format.</p>
+
+  <div class="scorecard" style="margin-bottom:18px">
+    <div class="kpi">
+      <div class="kpi-label">Number of events</div>
+      <div class="kpi-value">18</div>
+      <div class="kpi-sub">2025 total: 24</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Total sign-ups</div>
+      <div class="kpi-value">409</div>
+      <div class="kpi-sub">excl. Community Breakfast (163)</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Community Breakfast North</div>
+      <div class="kpi-value">98</div>
+      <div class="kpi-sub">12 sessions · avg 8 per session</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Community Breakfast South</div>
+      <div class="kpi-value">64</div>
+      <div class="kpi-sub">8 sessions · avg 8 per session</div>
+    </div>
+  </div>
+
+  <table class="evt-table">
+    <thead>
+      <tr><th>Date</th><th>Event</th><th>Responsible</th><th style="text-align:right">Sign-ups</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Mar 06</td><td><span class="evt-name">Hackathon: Disability Tech Hackathon</span></td><td>Empower</td><td>122</td></tr>
+      <tr><td>Feb 10</td><td><span class="evt-name">FoodHack Copenhagen: Alternative Proteins &amp; Technology</span></td><td>Engage</td><td>67</td></tr>
+      <tr><td>Mar 17</td><td><span class="evt-name">MasterClass: Partnerships &amp; Growth in Healthcare</span></td><td>Engage</td><td>48</td></tr>
+      <tr><td>Mar 14</td><td><span class="evt-name">KU Lighthouse Friday Bar — hosted by Nøgensnegl</span></td><td>Engage</td><td>45</td></tr>
+      <tr><td>Feb 16</td><td><span class="evt-name">Gender Lunch at Lighthouse</span></td><td>Engage</td><td>25</td></tr>
+      <tr><td>Mar 12</td><td><span class="evt-name">KU Innovators Pitch Night</span></td><td>Nurture</td><td>24</td></tr>
+      <tr><td>Jan 28</td><td><span class="evt-name">LH WorkSession: Formalities of forming a company</span></td><td>Engage</td><td>15</td></tr>
+      <tr><td>Mar 19</td><td><span class="evt-name">Sund Kapital — Når du trives, trives din virksomhed</span></td><td>Engage</td><td>15</td></tr>
+      <tr><td>Mar 04</td><td><span class="evt-name">Community Intro Session</span></td><td>Engage</td><td>14</td></tr>
+      <tr><td>Jan 16</td><td><span class="evt-name">Pitch Event: Student Perspectives on Health Innovation in Kibera</span></td><td>Nurture</td><td>12</td></tr>
+      <tr><td>Feb 16</td><td><span class="evt-name">LH WorkSession: Bookkeeping before VAT accounting</span></td><td>Engage</td><td>5</td></tr>
+      <tr><td>Feb 05</td><td><span class="evt-name">LH WorkSession: Pitch Training Week #6</span></td><td>Engage</td><td>4</td></tr>
+      <tr><td>Jan 13</td><td><span class="evt-name">Community Intro Session</span></td><td>Engage</td><td>4</td></tr>
+      <tr><td>Mar 13</td><td><span class="evt-name">WorkSession: Early validation — &quot;The Mom Test&quot;</span></td><td>Engage</td><td>3</td></tr>
+      <tr><td>Feb 03</td><td><span class="evt-name">Community Intro Session</span></td><td>Engage</td><td>2</td></tr>
+      <tr><td>Feb 25</td><td><span class="evt-name">Community Meet-up: February 25</span></td><td>Engage</td><td>2</td></tr>
+      <tr><td>Mar 10</td><td><span class="evt-name">LH WorkSession: Pitch Training Week #10</span></td><td>Engage</td><td>1</td></tr>
+      <tr><td>Mar 26</td><td><span class="evt-name">LH WorkSession: Pitch Training Week #15</span></td><td>Engage</td><td>1</td></tr>
+      </tbody>
+  </table>
+
+  <div class="insight insight-amber" style="margin-top:8px">
+    <strong>The 3 largest events account for 58% of all sign-ups.</strong> The Disability Tech Hackathon (122), FoodHack (67) and the Healthcare MasterClass (48) drove the bulk of engagement. Community Intros (3 events) attracted 20 sign-ups. WorkSessions (7 events) attracted only 19 sign-ups total — the format may benefit from a review, whether of format, communication, or whether low attendance reflects a deliberately small, high-engagement cohort.
+  </div>
+  <div class="insight insight-purple" style="margin-top:8px">
+    <strong>Data recommendation:</strong> Events from the Empower and Support teams in UCPH Lighthouse are not systematically included, and the reported figure may therefore be incomplete. Note that a methodological change was applied between 2025 and 2026 — figures are therefore not directly comparable across years. Recommendation: establish a formal process for data collection across teams if a complete picture of event engagement is to be reported going forward.
+  </div>
+</div>
+
+<!--
+  FUTURE ANALYSIS — Q2 og fremover:
+  Det er interessant at vise fordelingen af events på tværs af størrelseskategorier:
+  - Large events (50+ sign-ups): antal events + % af total sign-ups
+  - Medium events (20–49 sign-ups): antal events + % af total sign-ups
+  - Small events (fewer than 20 sign-ups): antal events + % af total sign-ups
+  Q1 2026 baseline: Large = 2 events (46% af sign-ups), Medium = 4 events (35%), Small = 12 events (19%)
+  Når Q2 data tilføjes, kan man se om fordelingen forskydes mod større eller mindre events.
+  Overvej at tilføje dette som en visuel breakdown (fx stacked bar chart) når der er 2+ kvartaler at sammenligne.
+-->
+
+<!-- ══════════ CHAPTER: PROGRAMMES ══════════ -->
+<div class="chapter">
+  <div class="chapter-pre">Chapter 4 — Programmes</div>
+  <h2>Students &amp; Researchers in Programmes</h2>
+</div>
+
+<div class="section" style="padding-top:28px">
+  <div class="section-eyebrow">Programme Overview</div>
+  <h2 class="section-title">Programmes in UCPH Lighthouse</h2>
+
+  <div class="scorecard" style="margin-bottom:18px">
+    <div class="kpi">
+      <div class="kpi-label">Active programmes</div>
+      <div class="kpi-value">5</div>
+      <div class="kpi-sub">out of 9 planned</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Individuals in programmes</div>
+      <div class="kpi-value">277</div>
+      <div class="kpi-sub">2025 total: 478</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Projects in programmes</div>
+      <div class="kpi-value">54</div>
+    </div>
+  </div>
+
+  <div class="section-eyebrow" style="margin-top:20px">Programme breakdown</div>
+
+  <p style="font-size:11px;color:var(--soft);margin-bottom:8px">
+    <span class="type-n">Nurture</span> Early stage (innovation capacity building) &nbsp;·&nbsp;
+    <span class="type-e">Engage</span> Later stage (development of idea / project)
+  </p>
+
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+  <table class="prog-table">
+    <thead>
+      <tr>
+        <th style="width:36%">Programme</th>
+        <th>Applicants<br>2025</th>
+        <th>Accepted individuals<br>2025</th>
+        <th>Applicants<br>Q1 2026</th>
+        <th>Accepted individuals<br>Q1 2026</th>
+        <th>Accepted Projects<br>Q1 2026</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Explore<span class="type-n">Nurture</span></td>
+        <td>298</td><td>257</td><td>142</td><td>137</td><td>—</td>
+      </tr>
+      <tr>
+        <td>KU Innovators<span class="type-n">Nurture</span></td>
+        <td>92</td><td>92</td><td>28</td><td>28</td><td>23</td>
+      </tr>
+      <tr>
+        <td>Health Innovators<span class="type-e">Engage</span></td>
+        <td>40</td><td>34</td><td>34</td><td>34</td><td>12</td>
+      </tr>
+      <tr>
+        <td>Lighthouse Launch<span class="type-e">Engage</span></td>
+        <td>—</td><td>—</td><td>19</td><td>51*</td><td>9</td>
+      </tr>
+      <tr>
+        <td>SPARK Denmark<span class="type-e">Engage</span></td>
+        <td>43</td><td>22</td><td>34</td><td>27*</td><td>10</td>
+      </tr>
+      <tr>
+        <td>Sustainability Olympiad<span class="type-n">Nurture</span></td>
+        <td>55</td><td>55</td><td>0</td><td>0</td><td>—</td>
+      </tr>
+      <tr>
+        <td>Student VC Programme<span class="type-e">Engage</span></td>
+        <td>37</td><td>12</td><td>0</td><td>0</td><td>—</td>
+      </tr>
+      <tr>
+        <td>Spin-Outs Denmark<span class="type-e">Engage</span></td>
+        <td>8</td><td>6</td><td>0</td><td>0</td><td>0</td>
+      </tr>
+      <tr>
+        <td>Open Entrepreneurship<span class="type-e">Engage</span></td>
+        <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>Total</td>
+        <td>573</td><td>478</td><td>257</td><td>277</td><td>54</td>
+      </tr>
+    </tfoot>
+  </table>
+  </div>
+  <p style="font-size:10px;color:var(--soft);margin-top:6px">* An applicant may be either an individual or a project, depending on the programme. Applicants in SPARK Denmark and Lighthouse Launch are projects (teams) — the number of accepted individuals may therefore be higher than the application number.</p>
+
+  <!--
+    ANALYSE-TANKEGANGEN FOR DEN BLÅ BOX — til næste kvartal:
+    1) Sammenlign Q1 accepted mod 2025 total (% af årets total nået i Q1)
+    2) Identificer hvilket program der har flest accepted individuals og beregn % af alle Q1 acceptances
+    3) Nævn nye programmer der kører for første gang
+    4) Tjek hvilke programmer der har samme antal i applicants og accepted — fuld optag antyder plads til vækst
+    5) Nævn Explore's andel af ikke-UCPH deltagere (80% i Q1 2026) som kontekst
+  -->
+  <div class="insight" style="margin-top:12px">
+    <strong>277 individuals accepted across 5 active programmes in Q1 — 58% of the 2025 total.</strong> Explore leads with 137 accepted individuals (49% of all Q1 acceptances). Lighthouse Launch is a new programme running for the first time in 2026, with 51 accepted participants across 9 teams in Q1. KU Innovators and Health Innovators both show full uptake — accepted individuals match applicants — suggesting capacity for growth in both programmes.
+  </div>
+
+  <div class="insight insight-purple" style="margin-top:8px">
+    <strong>Data recommendation:</strong> Applicants are either individuals or teams depending on the programme — SPARK Denmark and Lighthouse Launch report project/team applications, all others report individual applications. Applicant numbers and acceptance ratios are therefore not directly comparable across programmes; accepted individuals is the most consistent cross-programme metric. Recommendation: split applicant data into individual and team columns in the source data. Note: Open Entrepreneurship does not operate with a formal application or acceptance process and will always appear as zero in this table.
+  </div>
+</div>
+
+<!-- FACULTY SECTION -->
+<div class="section">
+  <div class="section-eyebrow">Faculty Representation in Programmes</div>
+  <h2 class="section-title">Faculty diversity across programmes</h2>
+  <p class="section-sub">Based on accepted participants across all active programmes. Q1 2026.</p>
+
+  <!-- Two pie charts side by side -->
+  <div class="section-eyebrow" style="margin-top:0">Faculty distribution across all programmes</div>
+  <div class="two-col" style="margin-bottom:20px">
+
+    <div style="background:var(--bg);border-radius:10px;padding:16px 20px">
+      <div style="font-size:10px;color:var(--soft);margin-bottom:10px">All accepted incl. non-UCPH (n=277)</div>
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+        <svg viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;width:140px;height:140px">
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#f0f0f0" stroke-width="18"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#666666" stroke-width="18" stroke-dasharray="185.8 263.9" stroke-dashoffset="0" transform="rotate(-90 55 55)"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#2d7a3a" stroke-width="18" stroke-dasharray="35.3 263.9" stroke-dashoffset="-185.8" transform="rotate(-90 55 55)"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#197f8e" stroke-width="18" stroke-dasharray="15.3 263.9" stroke-dashoffset="-221.1" transform="rotate(-90 55 55)"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#425570" stroke-width="18" stroke-dasharray="13.4 263.9" stroke-dashoffset="-236.4" transform="rotate(-90 55 55)"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#d4843e" stroke-width="18" stroke-dasharray="9.6 263.9" stroke-dashoffset="-249.8" transform="rotate(-90 55 55)"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#c73028" stroke-width="18" stroke-dasharray="2.9 263.9" stroke-dashoffset="-259.4" transform="rotate(-90 55 55)"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#ffbd38" stroke-width="18" stroke-dasharray="0.9 263.9" stroke-dashoffset="-262.2" transform="rotate(-90 55 55)"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#e1dfdf" stroke-width="18" stroke-dasharray="0.9 263.9" stroke-dashoffset="-263.2" transform="rotate(-90 55 55)"/>
+          <text x="55" y="50" text-anchor="middle" font-family="var(--font-display,'Playfair Display',Georgia,serif)" font-size="18" fill="#122947">277</text>
+          <text x="55" y="64" text-anchor="middle" font-family="var(--font-body,'IBM Plex Sans',sans-serif)" font-size="9" fill="#8a94a6">accepted</text>
+        </svg>
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:11px">
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#666666;flex-shrink:0"></span><span style="color:var(--mid)">Not from UCPH</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">195 (70%)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#2d7a3a;flex-shrink:0"></span><span style="color:var(--mid)">Science</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">37 (13%)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#197f8e;flex-shrink:0"></span><span style="color:var(--mid)">Humanities</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">16 (6%)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#425570;flex-shrink:0"></span><span style="color:var(--mid)">Health</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">14 (5%)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#d4843e;flex-shrink:0"></span><span style="color:var(--mid)">Social Sciences</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">10 (4%)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#c73028;flex-shrink:0"></span><span style="color:var(--mid)">Theology</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">3 (1%)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#ffbd38;flex-shrink:0"></span><span style="color:var(--mid)">Law</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">1 (0%)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#e1dfdf;flex-shrink:0;border:1px solid #d1d5db"></span><span style="color:var(--mid)">UCPH Unknown</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">1 (0%)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg);border-radius:10px;padding:16px 20px">
+      <div style="font-size:10px;color:var(--soft);margin-bottom:10px">UCPH participants only (n=82)</div>
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+        <svg viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;width:140px;height:140px">
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#f0f0f0" stroke-width="18"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#2d7a3a" stroke-width="18" stroke-dasharray="119.0 263.9" stroke-dashoffset="0" transform="rotate(-90 55 55)"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#197f8e" stroke-width="18" stroke-dasharray="51.5 263.9" stroke-dashoffset="-119.0" transform="rotate(-90 55 55)"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#425570" stroke-width="18" stroke-dasharray="45.1 263.9" stroke-dashoffset="-170.5" transform="rotate(-90 55 55)"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#d4843e" stroke-width="18" stroke-dasharray="32.2 263.9" stroke-dashoffset="-215.6" transform="rotate(-90 55 55)"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#c73028" stroke-width="18" stroke-dasharray="9.8 263.9" stroke-dashoffset="-247.8" transform="rotate(-90 55 55)"/>
+          <circle cx="55" cy="55" r="42" fill="none" stroke="#ffbd38" stroke-width="18" stroke-dasharray="6.3 263.9" stroke-dashoffset="-257.6" transform="rotate(-90 55 55)"/>
+          <text x="55" y="50" text-anchor="middle" font-family="var(--font-display,'Playfair Display',Georgia,serif)" font-size="18" fill="#122947">82</text>
+          <text x="55" y="64" text-anchor="middle" font-family="var(--font-body,'IBM Plex Sans',sans-serif)" font-size="9" fill="#8a94a6">UCPH</text>
+        </svg>
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:11px">
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#2d7a3a;flex-shrink:0"></span><span style="color:var(--mid)">Science</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">37 (45%)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#197f8e;flex-shrink:0"></span><span style="color:var(--mid)">Humanities</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">16 (20%)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#425570;flex-shrink:0"></span><span style="color:var(--mid)">Health</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">14 (17%)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#d4843e;flex-shrink:0"></span><span style="color:var(--mid)">Social Sciences</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">10 (12%)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#c73028;flex-shrink:0"></span><span style="color:var(--mid)">Theology</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">3 (4%)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#ffbd38;flex-shrink:0"></span><span style="color:var(--mid)">Law</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">1 (1%)</span></div>
+          <div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:#e1dfdf;flex-shrink:0;border:1px solid #d1d5db"></span><span style="color:var(--mid)">UCPH Unknown</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:8px">1 (1%)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight insight-amber" style="margin-top:12px;margin-bottom:20px">
+    <strong>70% of accepted participants across programmes are from outside UCPH</strong> — primarily driven by Health Innovators (82%), Explore (80%) and Lighthouse Launch (75%). Among UCPH faculties, Science (37), Humanities (16) and Health (14) are best represented. KU Innovators is the most faculty-diverse programme with participants from 5 different UCPH faculties.
+  </div>
+
+  <!-- 100% stacked bar incl. non-UCPH -->
+  <div class="section-eyebrow" style="margin-top:0">Faculty distribution per programme — incl. non-UCPH · 100% stacked</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--soft);margin-bottom:10px">
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#2d7a3a;display:inline-block"></span> Science</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#425570;display:inline-block"></span> Health</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#197f8e;display:inline-block"></span> Humanities</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#d4843e;display:inline-block"></span> Social Sciences</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#c73028;display:inline-block"></span> Theology</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#ffbd38;display:inline-block"></span> Law</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#e1dfdf;border:1px solid #d1d5db;display:inline-block"></span> UCPH Unknown</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#666666;display:inline-block"></span> Not from UCPH</span>
+  </div>
+  <div style="position:relative;width:100%;height:260px;margin-bottom:20px">
+    <canvas id="fakVandretInkl" role="img" aria-label="Faculty distribution per programme 100% stacked bar incl. non-UCPH">Explore: 80% ext. KUI: 93% UCPH. HI: 82% ext. LHL: 75% ext. SPARK: 67% ext.</canvas>
+  </div>
+  <script>
+  (function(){
+    var raw=[[18,3,2,4,1,0,0,109],[8,1,10,5,1,0,1,2],[3,1,1,1,0,0,0,28],[8,0,3,0,1,1,0,38],[0,9,0,0,0,0,0,18]];
+    var totals=[137,28,34,51,27];
+    var labels=['Explore','KU Innovators','Health Innovators','Lighthouse Launch','SPARK Denmark'];
+    var colors=['#2d7a3a','#425570','#197f8e','#d4843e','#c73028','#ffbd38','#e1dfdf','#666666'];
+    var names=['Science','Health','Humanities','Social Sciences','Theology','Law','UCPH Unknown','Not from UCPH'];
+    var pct=raw.map(function(row){var tot=row.reduce(function(s,v){return s+v;},0);return row.map(function(v){return Math.round(v/tot*100);});});
+    var datasets=names.map(function(lbl,i){return{label:lbl,data:pct.map(function(r){return r[i];}),backgroundColor:colors[i],borderRadius:0};});
+    new Chart(document.getElementById('fakVandretInkl'),{
+      type:'bar',data:{labels:labels,datasets:datasets},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{
+          label:function(c){var v=c.parsed.x;var abs=raw[c.dataIndex][c.datasetIndex];return v>0?c.dataset.label+': '+abs+' ('+v+'%)':null;},
+          footer:function(items){return'Total accepted: '+totals[items[0].dataIndex];}
+        }}},
+        scales:{
+          y:{stacked:true,grid:{display:false},ticks:{font:{size:11,family:"'IBM Plex Sans',sans-serif"},color:'#8a94a6',autoSkip:false}},
+          x:{stacked:true,min:0,max:100,grid:{color:'rgba(128,128,128,0.08)'},ticks:{font:{size:11,family:"'IBM Plex Sans',sans-serif"},color:'#8a94a6',callback:function(v){return v+'%';},stepSize:25}}
+        }
+      }
+    });
+  })();
+  </script>
+
+  <!-- 100% stacked bar excl. non-UCPH -->
+  <div class="section-eyebrow" style="margin-top:0">Faculty distribution per programme — excl. non-UCPH · 100% stacked</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--soft);margin-bottom:10px">
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#2d7a3a;display:inline-block"></span> Science</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#425570;display:inline-block"></span> Health</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#197f8e;display:inline-block"></span> Humanities</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#d4843e;display:inline-block"></span> Social Sciences</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#c73028;display:inline-block"></span> Theology</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#ffbd38;display:inline-block"></span> Law</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#e1dfdf;border:1px solid #d1d5db;display:inline-block"></span> UCPH Unknown</span>
+  </div>
+  <div style="position:relative;width:100%;height:260px;margin-bottom:20px">
+    <canvas id="fakVandretEkskl" role="img" aria-label="Faculty distribution per programme 100% stacked bar excl. non-UCPH">KUI: Science 31% HUM 38% SAMF 19%. Explore: Science 64%. LHL: Science 62%. SPARK: Health 100%. HI: Science 50%.</canvas>
+  </div>
+  <script>
+  (function(){
+    // Raw: [Science, Health, HUM, SAMF, Theology, Law, UCPH Unknown] — non-UCPH excluded
+    var raw=[[18,3,2,4,1,0,0],[8,1,10,5,1,0,1],[3,1,1,1,0,0,0],[8,0,3,0,1,1,0],[0,9,0,0,0,0,0]];
+    var totals=[28,26,6,13,9];
+    var labels=['Explore','KU Innovators','Health Innovators','Lighthouse Launch','SPARK Denmark'];
+    var colors=['#2d7a3a','#425570','#197f8e','#d4843e','#c73028','#ffbd38','#e1dfdf'];
+    var names=['Science','Health','Humanities','Social Sciences','Theology','Law','UCPH Unknown'];
+    var pct=raw.map(function(row){var tot=row.reduce(function(s,v){return s+v;},0);return row.map(function(v){return tot>0?Math.round(v/tot*100):0;});});
+    var datasets=names.map(function(lbl,i){return{label:lbl,data:pct.map(function(r){return r[i];}),backgroundColor:colors[i],borderRadius:0};});
+    new Chart(document.getElementById('fakVandretEkskl'),{
+      type:'bar',data:{labels:labels,datasets:datasets},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{
+          label:function(c){var v=c.parsed.x;var abs=raw[c.dataIndex][c.datasetIndex];return v>0?c.dataset.label+': '+abs+' ('+v+'%)':null;},
+          footer:function(items){return'UCPH participants: '+totals[items[0].dataIndex];}
+        }}},
+        scales:{
+          y:{stacked:true,grid:{display:false},ticks:{font:{size:11,family:"'IBM Plex Sans',sans-serif"},color:'#8a94a6',autoSkip:false}},
+          x:{stacked:true,min:0,max:100,grid:{color:'rgba(128,128,128,0.08)'},ticks:{font:{size:11,family:"'IBM Plex Sans',sans-serif"},color:'#8a94a6',callback:function(v){return v+'%';},stepSize:25}}
+        }
+      }
+    });
+  })();
+  </script>
+
+  <!-- Faculty detail view -->
+  <div class="section-eyebrow" style="margin-top:0">Faculty distribution per programme — detail view</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:16px">
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">Explore <span style="font-size:9px;color:var(--soft);font-weight:400">— 137 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px">
+        <div style="width:79.6%;background:#666666"></div>
+        <div style="width:13.1%;background:#2d7a3a"></div>
+        <div style="width:2.9%;background:#425570"></div>
+        <div style="width:1.5%;background:#122947"></div>
+        <div style="width:2.9%;background:#d4843e"></div>
+      </div>
+      <div style="font-size:11px;color:var(--soft)">
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Not from UCPH</span><span style="font-weight:500;color:var(--ink)">109 (80%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Science</span><span style="font-weight:500;color:var(--ink)">18 (13%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Social Sciences</span><span style="font-weight:500;color:var(--ink)">4 (3%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Health</span><span style="font-weight:500;color:var(--ink)">3 (2%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Humanities</span><span style="font-weight:500;color:var(--ink)">2 (1%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Theology</span><span style="font-weight:500;color:var(--ink)">1 (1%)</span></div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">KU Innovators <span style="font-size:9px;color:var(--soft);font-weight:400">— 28 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px">
+        <div style="width:28.6%;background:#2d7a3a"></div>
+        <div style="width:35.7%;background:#122947"></div>
+        <div style="width:17.9%;background:#d4843e"></div>
+        <div style="width:3.6%;background:#425570"></div>
+        <div style="width:3.6%;background:#c73028"></div>
+        <div style="width:3.6%;background:#e1dfdf"></div>
+        <div style="width:7.1%;background:#666666"></div>
+      </div>
+      <div style="font-size:11px;color:var(--soft)">
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Humanities</span><span style="font-weight:500;color:var(--ink)">10 (36%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Science</span><span style="font-weight:500;color:var(--ink)">8 (29%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Social Sciences</span><span style="font-weight:500;color:var(--ink)">5 (18%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Not from UCPH</span><span style="font-weight:500;color:var(--ink)">2 (7%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Health</span><span style="font-weight:500;color:var(--ink)">1 (4%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Theology</span><span style="font-weight:500;color:var(--ink)">1 (4%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>UCPH Unknown</span><span style="font-weight:500;color:var(--ink)">1 (4%)</span></div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">Health Innovators <span style="font-size:9px;color:var(--soft);font-weight:400">— 34 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px">
+        <div style="width:82.4%;background:#666666"></div>
+        <div style="width:8.8%;background:#2d7a3a"></div>
+        <div style="width:2.9%;background:#425570"></div>
+        <div style="width:2.9%;background:#122947"></div>
+        <div style="width:2.9%;background:#d4843e"></div>
+      </div>
+      <div style="font-size:11px;color:var(--soft)">
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Not from UCPH</span><span style="font-weight:500;color:var(--ink)">28 (82%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Science</span><span style="font-weight:500;color:var(--ink)">3 (9%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Health</span><span style="font-weight:500;color:var(--ink)">1 (3%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Humanities</span><span style="font-weight:500;color:var(--ink)">1 (3%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Social Sciences</span><span style="font-weight:500;color:var(--ink)">1 (3%)</span></div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">Lighthouse Launch <span style="font-size:9px;color:var(--soft);font-weight:400">— 51 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px">
+        <div style="width:74.5%;background:#666666"></div>
+        <div style="width:15.7%;background:#2d7a3a"></div>
+        <div style="width:5.9%;background:#122947"></div>
+        <div style="width:2%;background:#c73028"></div>
+        <div style="width:2%;background:#ffbd38"></div>
+      </div>
+      <div style="font-size:11px;color:var(--soft)">
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Not from UCPH</span><span style="font-weight:500;color:var(--ink)">38 (75%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Science</span><span style="font-weight:500;color:var(--ink)">8 (16%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Humanities</span><span style="font-weight:500;color:var(--ink)">3 (6%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Theology</span><span style="font-weight:500;color:var(--ink)">1 (2%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Law</span><span style="font-weight:500;color:var(--ink)">1 (2%)</span></div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">SPARK Denmark <span style="font-size:9px;color:var(--soft);font-weight:400">— 27 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px">
+        <div style="width:66.7%;background:#666666"></div>
+        <div style="width:33.3%;background:#425570"></div>
+      </div>
+      <div style="font-size:11px;color:var(--soft)">
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Not from UCPH</span><span style="font-weight:500;color:var(--ink)">18 (67%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Health</span><span style="font-weight:500;color:var(--ink)">9 (33%)</span></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- ACADEMIC LEVEL SECTION -->
+<div class="section">
+  <div class="section-eyebrow">Academic Level in Programmes</div>
+  <h2 class="section-title">Academic level diversity across programmes</h2>
+  <p class="section-sub">Based on accepted participants across all active programmes. Lighthouse Launch data unknown.</p>
+
+  <!-- Donut: overall -->
+  <div class="section-eyebrow" style="margin-top:0">Academic level distribution across programmes</div>
+  <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;background:var(--bg);border-radius:10px;padding:16px 20px;max-width:460px;margin-bottom:20px">
+    <svg viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;width:140px;height:140px">
+      <!-- Total with data: 226. Bach/Master 192=85%, PhD 28=12%, Other 6=3%, Unknown 51 shown separately -->
+      <circle cx="55" cy="55" r="42" fill="none" stroke="#f0f0f0" stroke-width="18"/>
+      <!-- Bach/Master: 192/226 = 85% = 224.1/263.9 -->
+      <circle cx="55" cy="55" r="42" fill="none" stroke="#0a5963" stroke-width="18" stroke-dasharray="222.0 263.9" stroke-dashoffset="0" transform="rotate(-90 55 55)"/>
+      <!-- PhD: 28/226 = 12% = 32.7/263.9 -->
+      <circle cx="55" cy="55" r="42" fill="none" stroke="#3d8a94" stroke-width="18" stroke-dasharray="32.7 263.9" stroke-dashoffset="-222.0" transform="rotate(-90 55 55)"/>
+      <!-- Other: 6/226 = 3% = 7.0/263.9 -->
+      <circle cx="55" cy="55" r="42" fill="none" stroke="#7abcc4" stroke-width="18" stroke-dasharray="7.0 263.9" stroke-dashoffset="-254.7" transform="rotate(-90 55 55)"/>
+      <text x="55" y="50" text-anchor="middle" font-family="var(--font-display,'Playfair Display',Georgia,serif)" font-size="18" fill="#122947" font-weight="400">226</text>
+      <text x="55" y="64" text-anchor="middle" font-family="var(--font-body,'IBM Plex Sans',sans-serif)" font-size="9" fill="#8a94a6" letter-spacing="0.5">with data</text>
+    </svg>
+    <div style="display:flex;flex-direction:column;gap:6px;font-size:11px">
+      <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#0a5963;flex-shrink:0"></span><span style="color:var(--mid)">Students</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:12px">192 (85%)</span></div>
+      <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#3d8a94;flex-shrink:0"></span><span style="color:var(--mid)">PhD / Researcher</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:12px">28 (12%)</span></div>
+      <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#7abcc4;flex-shrink:0"></span><span style="color:var(--mid)">Other</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:12px">6 (3%)</span></div>
+      <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#e1dfdf;flex-shrink:0;border:1px solid #d1d5db"></span><span style="color:var(--mid)">Unknown (LH Launch)</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:12px">51</span></div>
+    </div>
+  </div>
+
+  <div class="insight" style="margin-top:12px;margin-bottom:20px">
+    <strong>Students (bachelor and master level) dominate across most programmes (85% overall).</strong> SPARK Denmark stands out with 81% PhD/researcher participants — reflecting its research-to-market focus.
+  </div>
+  <!-- 100% stacked bar per programme -->
+  <div class="section-eyebrow" style="margin-top:0">Academic level per programme — 100% stacked bar</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--soft);margin-bottom:10px">
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#0a5963;display:inline-block"></span> Students</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#3d8a94;display:inline-block"></span> PhD / Researcher</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#7abcc4;display:inline-block"></span> Other</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#e1dfdf;border:1px solid #d1d5db;display:inline-block"></span> Unknown</span>
+  </div>
+  <div style="position:relative;width:100%;height:220px;margin-bottom:20px">
+    <canvas id="acadStackedBar" role="img" aria-label="Academic level per programme 100% stacked bar Q1 2026">Explore: BM97% PhD3%. KUI: BM93% PhD4% Other4%. SPARK: BM4% PhD81% Other15%. HI: BM94% PhD3% Other3%. LHL: Unavailable.</canvas>
+  </div>
+  <script>
+  (function(){
+    // Raw: [BM, PhD, Graduate, Other, Unknown] — Graduate merged into Other
+    var rawFull=[[133,4,0,0,0],[26,1,0,1,0],[32,1,1,0,0],[0,0,0,0,51],[1,22,0,4,0]];
+    var raw=rawFull.map(function(r){return[r[0],r[1],r[2]+r[3],r[4]];});
+    var totals=[137,28,34,51,27];
+    var labels=['Explore','KU Innovators','Health Innovators','Lighthouse Launch','SPARK Denmark'];
+    var colors=['#0a5963','#3d8a94','#7abcc4','#e1dfdf'];
+    var names=['Students','PhD / Researcher','Other','Unknown'];
+    var pct=raw.map(function(row){
+      var tot=row.reduce(function(s,v){return s+v;},0);
+      return row.map(function(v){return tot>0?Math.round(v/tot*100):0;});
+    });
+    var datasets=names.map(function(lbl,i){return{label:lbl,data:pct.map(function(r){return r[i];}),backgroundColor:colors[i],borderRadius:0};});
+    new Chart(document.getElementById('acadStackedBar'),{
+      type:'bar',data:{labels:labels,datasets:datasets},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{
+          label:function(c){var v=c.parsed.x;var abs=raw[c.dataIndex][c.datasetIndex];return v>0?c.dataset.label+': '+abs+' ('+v+'%)':null;},
+          footer:function(items){return'Total accepted: '+totals[items[0].dataIndex];}
+        }}},
+        scales:{
+          y:{stacked:true,grid:{display:false},ticks:{font:{size:11,family:"'IBM Plex Sans',sans-serif"},color:'#8a94a6',autoSkip:false}},
+          x:{stacked:true,min:0,max:100,grid:{color:'rgba(128,128,128,0.08)'},ticks:{font:{size:11,family:"'IBM Plex Sans',sans-serif"},color:'#8a94a6',callback:function(v){return v+'%';},stepSize:25}}
+        }
+      }
+    });
+  })();
+  </script>
+
+  <!-- Detail view -->
+  <div class="section-eyebrow" style="margin-top:0">Academic level per programme — detail view</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:16px">
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">Explore <span style="font-size:9px;color:var(--soft);font-weight:400">— 137 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px"><div style="width:97%;background:#0a5963"></div><div style="width:3%;background:#3d8a94"></div></div>
+      <div style="font-size:11px;color:var(--soft)">
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Students</span><span style="font-weight:500;color:var(--ink)">133 (97%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>PhD / Researcher</span><span style="font-weight:500;color:var(--ink)">4 (3%)</span></div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">KU Innovators <span style="font-size:9px;color:var(--soft);font-weight:400">— 28 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px"><div style="width:93%;background:#0a5963"></div><div style="width:4%;background:#3d8a94"></div><div style="width:3%;background:#7abcc4"></div></div>
+      <div style="font-size:11px;color:var(--soft)">
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Students</span><span style="font-weight:500;color:var(--ink)">26 (93%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>PhD / Researcher</span><span style="font-weight:500;color:var(--ink)">1 (4%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Other</span><span style="font-weight:500;color:var(--ink)">1 (4%)</span></div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">Health Innovators <span style="font-size:9px;color:var(--soft);font-weight:400">— 34 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px"><div style="width:94%;background:#0a5963"></div><div style="width:3%;background:#3d8a94"></div><div style="width:3%;background:#7abcc4"></div></div>
+      <div style="font-size:11px;color:var(--soft)">
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Students</span><span style="font-weight:500;color:var(--ink)">32 (94%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>PhD / Researcher</span><span style="font-weight:500;color:var(--ink)">1 (3%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Other</span><span style="font-weight:500;color:var(--ink)">1 (3%)</span></div>
+      </div>
+    </div>
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">Lighthouse Launch <span style="font-size:9px;color:var(--soft);font-weight:400">— 51 accepted</span></div>
+      <div style="height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px;background:repeating-linear-gradient(45deg,#e1dfdf,#e1dfdf 2px,#f5f5f5 2px,#f5f5f5 7px)"></div>
+      <div style="font-size:11px;color:var(--soft)">Data is unknown</div>
+    </div>
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">SPARK Denmark <span style="font-size:9px;color:var(--soft);font-weight:400">— 27 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px"><div style="width:4%;background:#0a5963"></div><div style="width:81%;background:#3d8a94"></div><div style="width:15%;background:#7abcc4"></div></div>
+      <div style="font-size:11px;color:var(--soft)">
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>PhD / Researcher</span><span style="font-weight:500;color:var(--ink)">22 (81%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Other</span><span style="font-weight:500;color:var(--ink)">4 (15%)</span></div>
+        <div style="display:flex;justify-content:space-between;padding:2px 0"><span>Students</span><span style="font-weight:500;color:var(--ink)">1 (4%)</span></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- GENDER SECTION -->
+<div class="section">
+  <div class="section-eyebrow">Gender Balance in Programmes</div>
+  <h2 class="section-title">Gender diversity across programmes</h2>
+  <p class="section-sub">Based on accepted participants across all active programmes.</p>
+
+  <!-- Graph 1: Overall donut -->
+  <div class="section-eyebrow" style="margin-top:0">Gender distribution across programmes</div>
+  <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;background:var(--bg);border-radius:10px;padding:16px 20px;max-width:460px;margin-bottom:20px">
+    <svg viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;width:140px;height:140px">
+      <circle cx="55" cy="55" r="42" fill="none" stroke="#f0f0f0" stroke-width="18"/>
+      <circle cx="55" cy="55" r="42" fill="none" stroke="#0a5963" stroke-width="18" stroke-dasharray="126.7 263.9" stroke-dashoffset="0" transform="rotate(-90 55 55)"/>
+      <circle cx="55" cy="55" r="42" fill="none" stroke="#3d8a94" stroke-width="18" stroke-dasharray="112.4 263.9" stroke-dashoffset="-126.7" transform="rotate(-90 55 55)"/>
+      <circle cx="55" cy="55" r="42" fill="none" stroke="#7abcc4" stroke-width="18" stroke-dasharray="8.4 263.9" stroke-dashoffset="-239.1" transform="rotate(-90 55 55)"/>
+      <circle cx="55" cy="55" r="42" fill="none" stroke="#e1dfdf" stroke-width="18" stroke-dasharray="16.1 263.9" stroke-dashoffset="-247.5" transform="rotate(-90 55 55)"/>
+      <text x="55" y="50" text-anchor="middle" font-family="var(--font-display, 'Playfair Display',Georgia,serif)" font-size="18" fill="#122947" font-weight="400">277</text>
+      <text x="55" y="64" text-anchor="middle" font-family="var(--font-body, 'IBM Plex Sans',sans-serif)" font-size="9" fill="#8a94a6" letter-spacing="0.5">accepted</text>
+    </svg>
+    <div style="display:flex;flex-direction:column;gap:6px;font-size:11px">
+      <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#0a5963;flex-shrink:0"></span><span style="color:var(--mid)">Female</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:12px">133 (48%)</span></div>
+      <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#3d8a94;flex-shrink:0"></span><span style="color:var(--mid)">Male</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:12px">118 (43%)</span></div>
+      <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#7abcc4;flex-shrink:0"></span><span style="color:var(--mid)">Other</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:12px">9 (3%)</span></div>
+      <div style="display:flex;align-items:center;gap:7px"><span style="width:9px;height:9px;border-radius:50%;background:#e1dfdf;flex-shrink:0;border:1px solid #d1d5db"></span><span style="color:var(--mid)">Unknown</span><span style="font-weight:500;color:var(--ink);margin-left:auto;padding-left:12px">17 (6%)</span></div>
+    </div>
+  </div>
+
+  <div class="insight insight-green" style="margin-top:12px;margin-bottom:20px">
+    <strong>Overall gender balance is healthy — 48% female, 43% male.</strong> Female participants are in the majority in Health Innovators (76%) and KU Innovators (57%). SPARK Denmark skews male (59%), reflecting its PhD/researcher cohort. Lighthouse Launch has the highest share of unknown (31%) — these figures should be interpreted with caution.
+  </div>
+
+  <!-- Graph 2: Horizontal 100% stacked bar per programme -->
+  <div class="section-eyebrow" style="margin-top:0">Gender distribution per programme — 100% stacked bar</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--soft);margin-bottom:10px">
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#0a5963;display:inline-block"></span> Female</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#3d8a94;display:inline-block"></span> Male</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#7abcc4;display:inline-block"></span> Other</span>
+    <span style="display:flex;align-items:center;gap:5px"><span style="width:9px;height:9px;border-radius:50%;background:#e1dfdf;border:1px solid #d1d5db;display:inline-block"></span> Unknown</span>
+  </div>
+  <div style="position:relative;width:100%;height:220px;margin-bottom:20px">
+    <canvas id="koenVandret" role="img" aria-label="Horizontal 100% stacked bar chart gender distribution per programme Q1 2026">Explore F50% M47% NB1% NS1%. KU Innovators F57% M39% NB4%. Health Innovators F76% M24%. Lighthouse Launch F22% M35% NB12% NS31%. SPARK F41% M59%.</canvas>
+  </div>
+  <script>
+  (function(){
+    var raw=[[69,65,2,1],[16,11,1,0],[26,8,0,0],[11,18,6,16],[11,16,0,0]];
+    var totals=[137,28,34,51,27];
+    var labels=['Explore','KU Innovators','Health Innovators','Lighthouse Launch','SPARK Denmark'];
+    var colors=['#0a5963','#3d8a94','#7abcc4','#e1dfdf'];
+    var names=['Female','Male','Other','Unknown'];
+    var pct=raw.map(function(row){var tot=row.reduce(function(s,v){return s+v;},0);return row.map(function(v){return Math.round(v/tot*100);});});
+    var datasets=names.map(function(lbl,i){return{label:lbl,data:pct.map(function(r){return r[i];}),backgroundColor:colors[i],borderRadius:0};});
+    new Chart(document.getElementById('koenVandret'),{
+      type:'bar',
+      data:{labels:labels,datasets:datasets},
+      options:{
+        indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){var v=c.parsed.x;return v>0?c.dataset.label+': '+raw[c.dataIndex][names.indexOf(c.dataset.label)]+' ('+v+'%)':null;},footer:function(items){return'Total accepted: '+totals[items[0].dataIndex];}}}},
+        scales:{
+          y:{stacked:true,grid:{display:false},ticks:{font:{size:11,family:"'IBM Plex Sans',sans-serif"},color:'#8a94a6',autoSkip:false}},
+          x:{stacked:true,min:0,max:100,grid:{color:'rgba(128,128,128,0.08)'},ticks:{font:{size:11,family:"'IBM Plex Sans',sans-serif"},color:'#8a94a6',callback:function(v){return v+'%';},stepSize:25}}
+        }
+      }
+    });
+  })();
+  </script>
+
+  <!-- Graph 3: Individual gender cards per programme -->
+  <div class="section-eyebrow" style="margin-top:0">Gender distribution per programme — detail view</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">Explore <span style="font-size:9px;color:var(--soft);font-weight:400">— 137 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px"><div style="width:50.4%;background:#0a5963"></div><div style="width:47.4%;background:#3d8a94"></div><div style="width:1.5%;background:#7abcc4"></div><div style="width:0.7%;background:#e1dfdf"></div></div>
+      <div style="font-size:11px;color:var(--soft)"><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Female</span><span style="font-weight:500;color:var(--ink)">69 (50%)</span></div><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Male</span><span style="font-weight:500;color:var(--ink)">65 (47%)</span></div><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Other</span><span style="font-weight:500;color:var(--ink)">2 (1%)</span></div><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Unknown</span><span style="font-weight:500;color:var(--ink)">1 (1%)</span></div></div>
+    </div>
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">KU Innovators <span style="font-size:9px;color:var(--soft);font-weight:400">— 28 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px"><div style="width:57.1%;background:#0a5963"></div><div style="width:39.3%;background:#3d8a94"></div><div style="width:3.6%;background:#7abcc4"></div></div>
+      <div style="font-size:11px;color:var(--soft)"><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Female</span><span style="font-weight:500;color:var(--ink)">16 (57%)</span></div><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Male</span><span style="font-weight:500;color:var(--ink)">11 (39%)</span></div><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Other</span><span style="font-weight:500;color:var(--ink)">1 (4%)</span></div></div>
+    </div>
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">Health Innovators <span style="font-size:9px;color:var(--soft);font-weight:400">— 34 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px"><div style="width:76.5%;background:#0a5963"></div><div style="width:23.5%;background:#3d8a94"></div></div>
+      <div style="font-size:11px;color:var(--soft)"><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Female</span><span style="font-weight:500;color:var(--ink)">26 (76%)</span></div><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Male</span><span style="font-weight:500;color:var(--ink)">8 (24%)</span></div></div>
+    </div>
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">Lighthouse Launch <span style="font-size:9px;color:var(--soft);font-weight:400">— 51 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px"><div style="width:21.6%;background:#0a5963"></div><div style="width:35.3%;background:#3d8a94"></div><div style="width:11.8%;background:#7abcc4"></div><div style="width:31.4%;background:#e1dfdf"></div></div>
+      <div style="font-size:11px;color:var(--soft)"><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Female</span><span style="font-weight:500;color:var(--ink)">11 (22%)</span></div><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Male</span><span style="font-weight:500;color:var(--ink)">18 (35%)</span></div><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Other</span><span style="font-weight:500;color:var(--ink)">6 (12%)</span></div><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Unknown</span><span style="font-weight:500;color:var(--ink)">16 (31%)</span></div></div>
+    </div>
+
+    <div style="background:var(--bg);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;font-weight:500;color:var(--ink);margin-bottom:10px">SPARK Denmark <span style="font-size:9px;color:var(--soft);font-weight:400">— 27 accepted</span></div>
+      <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;margin-bottom:8px"><div style="width:40.7%;background:#0a5963"></div><div style="width:59.3%;background:#3d8a94"></div></div>
+      <div style="font-size:11px;color:var(--soft)"><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Female</span><span style="font-weight:500;color:var(--ink)">11 (41%)</span></div><div style="display:flex;justify-content:space-between;padding:2px 0"><span>Male</span><span style="font-weight:500;color:var(--ink)">16 (59%)</span></div></div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ══════════ CHAPTER: RESEARCHER PIPELINE ══════════ -->
+<div class="chapter">
+  <div class="chapter-pre">Chapter 5 — Empower</div>
+  <h2>Research Innovation Pipeline &amp; Funding</h2>
+</div>
+
+<div class="section" style="padding-top:28px">
+  <div class="section-eyebrow">Innovation Funnel — Q1 2026</div>
+  <h2 class="section-title">From lead to commercialisation — pipeline status</h2>
+  <p class="section-sub">The Empower pipeline tracks research innovations from first contact to spin-out or licensing.</p>
+
+  <div style="background:var(--bg);border-radius:12px;padding:22px 24px;margin-bottom:18px">
+    <div style="display:flex;align-items:flex-end;gap:6px;height:110px">
+      <div class="funnel-step">
+        <div class="funnel-bar" style="background:#0a5963;height:110px"></div>
+      </div>
+      <div style="color:var(--soft);font-size:14px;padding-bottom:0;flex-shrink:0;align-self:flex-end;margin-bottom:4px">›</div>
+      <div class="funnel-step">
+        <div class="funnel-bar" style="background:#3d8a94;height:38px"></div>
+      </div>
+      <div style="color:var(--soft);font-size:14px;flex-shrink:0;align-self:flex-end;margin-bottom:4px">›</div>
+      <div class="funnel-step">
+        <div class="funnel-bar" style="background:#7abcc4;height:32px"></div>
+      </div>
+      <div style="color:var(--soft);font-size:14px;flex-shrink:0;align-self:flex-end;margin-bottom:4px">›</div>
+      <div class="funnel-step">
+        <div class="funnel-bar" style="background:#a8d4d8;height:27px"></div>
+      </div>
+      <div style="color:var(--soft);font-size:14px;flex-shrink:0;align-self:flex-end;margin-bottom:4px">›</div>
+      <div class="funnel-step">
+        <div class="funnel-bar" style="background:#cce8ea;height:3px"></div>
+      </div>
+      <div style="color:var(--soft);font-size:14px;flex-shrink:0;align-self:flex-end;margin-bottom:4px">›</div>
+      <div class="funnel-step">
+        <div class="funnel-bar" style="background:#e8f4f5;height:1px"></div>
+      </div>
+    </div>
+    <div class="funnel-labels">
+      <div style="flex:1;text-align:center"><div style="font-size:22px;font-family:'Playfair Display',serif;color:var(--ink);line-height:1">82</div><div style="font-size:10px;color:var(--soft);line-height:1.3;margin-top:3px">Innovation<br>Leads</div></div>
+      <div style="flex-shrink:0;width:18px"></div>
+      <div style="flex:1;text-align:center"><div style="font-size:22px;font-family:'Playfair Display',serif;color:var(--green);line-height:1">28</div><div style="font-size:10px;color:var(--soft);line-height:1.3;margin-top:3px">IDFs<br>Filed</div></div>
+      <div style="flex-shrink:0;width:18px"></div>
+      <div style="flex:1;text-align:center"><div style="font-size:22px;font-family:'Playfair Display',serif;color:var(--green);line-height:1">24</div><div style="font-size:10px;color:var(--soft);line-height:1.3;margin-top:3px">PoC<br>Applications</div></div>
+      <div style="flex-shrink:0;width:18px"></div>
+      <div style="flex:1;text-align:center"><div style="font-size:22px;font-family:'Playfair Display',serif;color:var(--green);line-height:1">20</div><div style="font-size:10px;color:var(--soft);line-height:1.3;margin-top:3px">PoC<br>Funded</div></div>
+      <div style="flex-shrink:0;width:18px"></div>
+      <div style="flex:1;text-align:center"><div style="font-size:22px;font-family:'Playfair Display',serif;color:var(--amber);line-height:1">2</div><div style="font-size:10px;color:var(--soft);line-height:1.3;margin-top:3px">Licences<br>Signed</div></div>
+      <div style="flex-shrink:0;width:18px"></div>
+      <div style="flex:1;text-align:center"><div style="font-size:22px;font-family:'Playfair Display',serif;color:var(--amber);line-height:1">0</div><div style="font-size:10px;color:var(--soft);line-height:1.3;margin-top:3px">Spin-outs<br>Formed</div></div>
+    </div>
+    <div style="margin-top:14px;font-size:11px;color:var(--soft)">Plus: <strong style="color:var(--ink)">183 active cases</strong> currently being supported by Empower (new indicator, no 2025 baseline).</div>
+  </div>
+
+  <div style="background:var(--bg);border-radius:12px;padding:16px 20px;margin-bottom:18px">
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;font-family:'DM Sans',sans-serif">
+        <thead>
+          <tr style="font-size:10px;color:var(--soft);font-weight:500">
+            <th style="text-align:left;padding:6px 8px;border-bottom:1px solid var(--rule)">Indicator</th>
+            <th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--rule)">2025 total</th>
+            <th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--rule)">Q1 2025</th>
+            <th style="text-align:right;padding:6px 8px;border-bottom:1px solid var(--rule)">Q1 2026</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--rule)"><td style="padding:6px 8px;color:var(--ink)">Innovation leads</td><td style="text-align:right;padding:6px 8px;color:var(--soft)">—</td><td style="text-align:right;padding:6px 8px;color:var(--mid)">—</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--ink)">82</td></tr>
+          <tr style="border-bottom:1px solid var(--rule)"><td style="padding:6px 8px;color:var(--ink)">IDFs filed</td><td style="text-align:right;padding:6px 8px;color:var(--mid)">66</td><td style="text-align:right;padding:6px 8px;color:var(--mid)">21</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--green)">28</td></tr>
+          <tr style="border-bottom:1px solid var(--rule)"><td style="padding:6px 8px;color:var(--ink)">PoC applications</td><td style="text-align:right;padding:6px 8px;color:var(--mid)">73</td><td style="text-align:right;padding:6px 8px;color:var(--mid)">13</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--green)">24</td></tr>
+          <tr style="border-bottom:1px solid var(--rule)"><td style="padding:6px 8px;color:var(--ink)">PoC funded</td><td style="text-align:right;padding:6px 8px;color:var(--mid)">60</td><td style="text-align:right;padding:6px 8px;color:var(--mid)">8</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--green)">20</td></tr>
+          <tr style="border-bottom:1px solid var(--rule)"><td style="padding:6px 8px;color:var(--ink)">Licences signed</td><td style="text-align:right;padding:6px 8px;color:var(--mid)">25</td><td style="text-align:right;padding:6px 8px;color:var(--mid)">7</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--amber)">2</td></tr>
+          <tr><td style="padding:6px 8px;color:var(--ink)">Spin-outs formed</td><td style="text-align:right;padding:6px 8px;color:var(--mid)">7</td><td style="text-align:right;padding:6px 8px;color:var(--mid)">2</td><td style="text-align:right;padding:6px 8px;font-weight:700;color:var(--amber)">0</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="insight insight-green" style="margin-top:8px">
+    <strong>IDFs (28), PoC Applications (24) and PoC Funded (20) all exceed 25% of their 2025 total totals in Q1 alone</strong> — suggesting the innovation pipeline is running at a strong pace entering 2026.
+  </div>
+
+  <div class="insight insight-amber" style="margin-top:8px">
+    <strong>Licences (2) and spin-outs (0) are Q1-low.</strong> Licensing deals and spin-outs tend to close unevenly through the year — 2025 total totals were 25 licences and 7 spin-outs. These numbers should be reviewed in context at Q2 before drawing conclusions.
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-eyebrow">Funding: PoC Grants &amp; InnoExplore</div>
+  <h2 class="section-title">Two funding tracks supporting researcher innovation</h2>
+  <p class="section-sub">KU Lighthouse supports researchers through two main funding tracks: internal PoC grants (Proof of Concept projects funded by UCPH) and InnoExplore (external grants from Innovation Fund Denmark for spinout-pathway projects).</p>
+
+  <div class="two-col">
+    <!-- PoC -->
+    <div>
+      <div style="background:var(--bg);border-radius:12px;padding:18px 20px;">
+        <div style="font-size:10px;font-weight:500;color:var(--soft);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">PoC Projects — Internal UCPH Grants</div>
+        <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:16px">
+          <div style="text-align:center">
+            <div style="font-family:'Playfair Display',serif;font-size:36px;color:var(--ink);line-height:1">24</div>
+            <div style="font-size:10px;color:var(--soft)">Applications</div>
+          </div>
+          <div style="padding-top:10px;font-size:18px;color:var(--soft)">→</div>
+          <div style="text-align:center">
+            <div style="font-family:'Playfair Display',serif;font-size:36px;color:var(--green);line-height:1">20</div>
+            <div style="font-size:10px;color:var(--soft)">Funded</div>
+          </div>
+          <div style="padding-top:14px;font-size:13px;color:var(--soft)">=</div>
+          <div style="text-align:center">
+            <div style="font-family:'Playfair Display',serif;font-size:36px;color:var(--ink);line-height:1">83%</div>
+            <div style="font-size:10px;color:var(--soft)">Success rate</div>
+          </div>
+        </div>
+        <div class="hbar-chart">
+          <div style="font-size:10px;color:var(--soft);margin-bottom:8px">By faculty — Q1 2026 (applications / funded)</div>
+          <div class="hbar-row">
+            <div class="hbar-label">Health</div>
+            <div class="hbar-track"><div class="hbar-fill" style="width:45.8%;background:var(--sund)"></div></div>
+            <div class="hbar-val">11/8</div>
+          </div>
+          <div class="hbar-row">
+            <div class="hbar-label">Science</div>
+            <div class="hbar-track"><div class="hbar-fill" style="width:33.3%;background:var(--science)"></div></div>
+            <div class="hbar-val">8/7</div>
+          </div>
+          <div class="hbar-row">
+            <div class="hbar-label">Humanities</div>
+            <div class="hbar-track"><div class="hbar-fill" style="width:16.7%;background:var(--hum)"></div></div>
+            <div class="hbar-val">4/4</div>
+          </div>
+          <div class="hbar-row">
+            <div class="hbar-label">Law</div>
+            <div class="hbar-track"><div class="hbar-fill" style="width:4.2%;background:var(--law)"></div></div>
+            <div class="hbar-val">1/1</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:10px;color:var(--soft);line-height:1.6"><strong style="color:var(--ink)">Data note:</strong> When PoC application deadlines fall near quarter-end, grants may be recorded in the following quarter. This can make Q1 data appear uneven — interpret in context of Q2 data.</div>
+      </div>
+    </div>
+
+    <!-- InnoExplore -->
+    <div>
+      <div style="background:var(--bg);border-radius:12px;padding:18px 20px;">
+        <div style="font-size:10px;font-weight:500;color:var(--soft);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px">InnoExplore — Innovation Fund Denmark Grants</div>
+        <div style="font-size:11px;color:var(--mid);margin-bottom:14px;line-height:1.65">InnoExplore supports researchers on the <strong style="color:var(--ink)">spinout pathway</strong> — applying for external grants from Innovation Fund Denmark to develop commercial potential from their research. Three sub-indicators are tracked:</div>
+        <div style="display:flex;gap:12px;margin-bottom:16px">
+          <div style="flex:1;text-align:center;background:#fff;border-radius:8px;padding:12px 8px">
+            <div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--ink);line-height:1">9</div>
+            <div style="font-size:10px;color:var(--soft);margin-top:4px">Applicants</div>
+            <div style="font-size:10px;color:var(--soft)">2025: 33</div>
+          </div>
+          <div style="flex:1;text-align:center;background:#fff;border-radius:8px;padding:12px 8px">
+            <div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--ink);line-height:1">8</div>
+            <div style="font-size:10px;color:var(--soft);margin-top:4px">Supported decl.</div>
+            <div style="font-size:10px;color:var(--soft)">2025: 23</div>
+          </div>
+          <div style="flex:1;text-align:center;background:#fff;border-radius:8px;padding:12px 8px">
+            <div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--green);line-height:1">4</div>
+            <div style="font-size:10px;color:var(--soft);margin-top:4px">Received funding</div>
+            <div style="font-size:10px;color:var(--soft)">2025: 5</div>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>InnoExplore — vs. 2025</th><th class="num">2025</th><th class="num">Q1 2026</th></tr></thead>
+          <tbody>
+            <tr><td>Applicants</td><td class="num">33</td><td class="num">9</td></tr>
+            <tr><td>Supported declarations</td><td class="num">23</td><td class="num">8</td></tr>
+            <tr><td>Received funding</td><td class="num">5</td><td class="num">4</td></tr>
+          </tbody>
+        </table>
+
+      </div>
+      <div class="insight insight-green" style="margin-top:8px">
+        <strong>InnoExplore funded 4 projects in Q1</strong> — already matching 80% of 2025's full-year total (5). This is a strong signal that the spinout pipeline is building. The high "supported declarations" (8 of 9 applicants) suggests effective pre-screening and coaching before submission.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-eyebrow">Researcher Metrics by Faculty — Q1 2026</div>
+  <h2 class="section-title">Where in the university is innovation happening?</h2>
+  <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+  <div class="heat-grid" style="min-width:380px">
+    <div class="hg-header" style="background:transparent"></div>
+    <div class="hg-header">Leads</div>
+    <div class="hg-header">IDFs</div>
+    <div class="hg-header">PoC Apps</div>
+    <div class="hg-header">PoC Funded</div>
+    <div class="hg-header">Licences</div>
+    <div class="hg-header">Spin-outs</div>
+
+    <!-- Health: 41 / 16 / 11 / 8 / 2 / 0 -->
+    <div class="hg-label"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--sund);margin-right:8px;flex-shrink:0"></span>Health</div>
+    <div class="hg-cell heat-hi">41</div>
+    <div class="hg-cell heat-hi">16</div>
+    <div class="hg-cell heat-hi">11</div>
+    <div class="hg-cell heat-hi">8</div>
+    <div class="hg-cell heat-hi">2</div>
+    <div class="hg-cell heat-0">0</div>
+
+    <!-- Science: 30 / 12 / 8 / 7 / 0 / 0 -->
+    <div class="hg-label"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--science);margin-right:8px;flex-shrink:0"></span>Science</div>
+    <div class="hg-cell heat-5">30</div>
+    <div class="hg-cell heat-5">12</div>
+    <div class="hg-cell heat-3">8</div>
+    <div class="hg-cell heat-5">7</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-0">0</div>
+
+    <!-- Humanities: 8 / 0 / 4 / 4 / 0 / 0 -->
+    <div class="hg-label"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--hum);margin-right:8px;flex-shrink:0"></span>Humanities</div>
+    <div class="hg-cell heat-1">8</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-2">4</div>
+    <div class="hg-cell heat-2">4</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-0">0</div>
+
+    <!-- Social Sciences: 4 / 0 / 0 / 0 / 0 / 0 -->
+    <div class="hg-label"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--samf);margin-right:8px;flex-shrink:0"></span>Social Sciences</div>
+    <div class="hg-cell heat-1">4</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-0">0</div>
+
+    <!-- Law: 0 / 0 / 1 / 1 / 0 / 0 -->
+    <div class="hg-label"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--law);margin-right:8px;flex-shrink:0"></span>Law</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-1">1</div>
+    <div class="hg-cell heat-1">1</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-0">0</div>
+
+    <!-- Theology: all zero -->
+    <div class="hg-label"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--theo);margin-right:8px;flex-shrink:0"></span>Theology</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-0">0</div>
+    <div class="hg-cell heat-0">0</div>
+
+    <!-- UCPH Total: 82 / 28 / 24 / 20 / 2 / 0 -->
+    <div class="hg-label" style="color:var(--ink);font-weight:600"><span style="display:inline-block;width:8px;height:8px;margin-right:8px;flex-shrink:0"></span>UCPH Total</div>
+    <div class="hg-cell heat-total">82</div>
+    <div class="hg-cell heat-total">28</div>
+    <div class="hg-cell heat-total">24</div>
+    <div class="hg-cell heat-total">20</div>
+    <div class="hg-cell heat-total">2</div>
+    <div class="hg-cell heat-total">0</div>
+  </div>
+  </div>
+
+  <div style="display:flex;gap:16px;align-items:center;margin-top:10px;flex-wrap:wrap">
+    <p style="font-size:10px;color:var(--soft)">Cell colour shows activity intensity relative to the column maximum — darker = higher. All values above zero have colour. Grey = zero.</p>
+    <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
+      <span style="font-size:9px;color:var(--soft)">Zero</span>
+      <div style="width:14px;height:14px;border-radius:3px;background:#eef0f4;border:1px solid var(--rule)"></div>
+      <div style="width:14px;height:14px;border-radius:3px;background:#cce8ea"></div>
+      <div style="width:14px;height:14px;border-radius:3px;background:#7abcc4"></div>
+      <div style="width:14px;height:14px;border-radius:3px;background:#3d8a94"></div>
+      <div style="width:14px;height:14px;border-radius:3px;background:#3d8a94"></div>
+      <span style="font-size:9px;color:var(--soft)">High</span>
+    </div>
+  </div>
+
+  <div class="insight insight-amber" style="margin-top:12px">
+    <strong>Health and Science dominate the innovation pipeline with 87% of all researcher leads.</strong> Encouragingly, Humanities shows 8 leads and 4 PoC applications — a sign of emerging engagement in a faculty not traditionally part of the research commercialisation pipeline. Law shows 1 PoC application and 1 funded despite 0 leads, which is worth following. Social Sciences and Theology remain at very early stages, which is expected given the newer focus on these directions in research commercialisation.
+  </div>
+</div>
+
+
+<div class="section">
+  <div class="section-eyebrow">Department Drill-Down — Q1 2026</div>
+  <h2 class="section-title">Where are the most active researchers?</h2>
+
+  <!-- Leads -->
+  <div class="ind-sep">Leads — Innovation contacts · Q1 2026 <span class="ind-badge">UCPH total: 82</span></div>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-title" style="color:var(--sund)">Health &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">41 leads</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label">BRIC</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--sund)"></div></div><div class="hbar-val">6</div></div>
+        <div class="hbar-row"><div class="hbar-label">Cell. &amp; Mol. Medicine</div><div class="hbar-track"><div class="hbar-fill" style="width:83%;background:var(--sund)"></div></div><div class="hbar-val">5</div></div>
+        <div class="hbar-row"><div class="hbar-label">reNEW</div><div class="hbar-track"><div class="hbar-fill" style="width:83%;background:var(--sund)"></div></div><div class="hbar-val">5</div></div>
+        <div class="hbar-row"><div class="hbar-label">Drug Design &amp; Pharm.</div><div class="hbar-track"><div class="hbar-fill" style="width:67%;background:var(--sund)"></div></div><div class="hbar-val">4</div></div>
+        <div class="hbar-row"><div class="hbar-label">Pharmacy</div><div class="hbar-track"><div class="hbar-fill" style="width:67%;background:var(--sund)"></div></div><div class="hbar-val">4</div></div>
+        <div class="hbar-row"><div class="hbar-label">CBMR</div><div class="hbar-track"><div class="hbar-fill" style="width:67%;background:var(--sund)"></div></div><div class="hbar-val">4</div></div>
+        <div class="hbar-row"><div class="hbar-label">Biomedical Sciences</div><div class="hbar-track"><div class="hbar-fill" style="width:50%;background:var(--sund)"></div></div><div class="hbar-val">3</div></div>
+        <div class="hbar-row"><div class="hbar-label">Neuroscience</div><div class="hbar-track"><div class="hbar-fill" style="width:50%;background:var(--sund)"></div></div><div class="hbar-val">3</div></div>
+        <div class="hbar-row"><div class="hbar-label">Vet. &amp; Animal Sciences</div><div class="hbar-track"><div class="hbar-fill" style="width:50%;background:var(--sund)"></div></div><div class="hbar-val">3</div></div>
+        <div class="hbar-row"><div class="hbar-label">CTN</div><div class="hbar-track"><div class="hbar-fill" style="width:33%;background:var(--sund)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label">Public Health</div><div class="hbar-track"><div class="hbar-fill" style="width:33%;background:var(--sund)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label">Odontology</div><div class="hbar-track"><div class="hbar-fill" style="width:17%;background:var(--sund)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Globe Institute</div><div class="hbar-track"><div class="hbar-fill" style="width:17%;background:var(--sund)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">5 other depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--science)">Science &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">30 leads</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label">Biology</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--science)"></div></div><div class="hbar-val">9</div></div>
+        <div class="hbar-row"><div class="hbar-label">Niels Bohr Institute</div><div class="hbar-track"><div class="hbar-fill" style="width:67%;background:var(--science)"></div></div><div class="hbar-val">6</div></div>
+        <div class="hbar-row"><div class="hbar-label">Food Science</div><div class="hbar-track"><div class="hbar-fill" style="width:56%;background:var(--science)"></div></div><div class="hbar-val">5</div></div>
+        <div class="hbar-row"><div class="hbar-label">Plant &amp; Env. Sciences</div><div class="hbar-track"><div class="hbar-fill" style="width:56%;background:var(--science)"></div></div><div class="hbar-val">5</div></div>
+        <div class="hbar-row"><div class="hbar-label">Chemistry</div><div class="hbar-track"><div class="hbar-fill" style="width:44%;background:var(--science)"></div></div><div class="hbar-val">4</div></div>
+        <div class="hbar-row"><div class="hbar-label">Computer Science</div><div class="hbar-track"><div class="hbar-fill" style="width:11%;background:var(--science)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">6 other depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--ssh)">SSH / Law / Theo &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">11 leads</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label">Cross-Cultural Studies</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--hum)"></div></div><div class="hbar-val">3</div></div>
+        <div class="hbar-row"><div class="hbar-label">Communications</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--hum)"></div></div><div class="hbar-val">3</div></div>
+        <div class="hbar-row"><div class="hbar-label">Psychology</div><div class="hbar-track"><div class="hbar-fill" style="width:67%;background:var(--samf)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label">English Germanic &amp; Romance</div><div class="hbar-track"><div class="hbar-fill" style="width:33%;background:var(--hum)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Nordic Studies &amp; Linguistics</div><div class="hbar-track"><div class="hbar-fill" style="width:33%;background:var(--hum)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">SODAS</div><div class="hbar-track"><div class="hbar-fill" style="width:33%;background:var(--samf)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Economics</div><div class="hbar-track"><div class="hbar-fill" style="width:33%;background:var(--samf)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">8 other depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IDFs -->
+  <div class="ind-sep">IDFs — Invention Disclosure Forms · Q1 2026 <span class="ind-badge">UCPH total: 28</span></div>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-title" style="color:var(--sund)">Health &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">16 IDFs</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label">CTN</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--sund)"></div></div><div class="hbar-val">3</div></div>
+        <div class="hbar-row"><div class="hbar-label">Drug Design &amp; Pharm.</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--sund)"></div></div><div class="hbar-val">3</div></div>
+        <div class="hbar-row"><div class="hbar-label">Pharmacy</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--sund)"></div></div><div class="hbar-val">3</div></div>
+        <div class="hbar-row"><div class="hbar-label">Biomedical Sciences</div><div class="hbar-track"><div class="hbar-fill" style="width:67%;background:var(--sund)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label">Cell. &amp; Mol. Medicine</div><div class="hbar-track"><div class="hbar-fill" style="width:67%;background:var(--sund)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label">Odontology</div><div class="hbar-track"><div class="hbar-fill" style="width:67%;background:var(--sund)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label">CBMR</div><div class="hbar-track"><div class="hbar-fill" style="width:67%;background:var(--sund)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label">Vet. &amp; Animal Sciences</div><div class="hbar-track"><div class="hbar-fill" style="width:33%;background:var(--sund)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">reNEW</div><div class="hbar-track"><div class="hbar-fill" style="width:33%;background:var(--sund)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">9 other depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--science)">Science &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">12 IDFs</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label">Plant &amp; Env. Sciences</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--science)"></div></div><div class="hbar-val">4</div></div>
+        <div class="hbar-row"><div class="hbar-label">Biology</div><div class="hbar-track"><div class="hbar-fill" style="width:75%;background:var(--science)"></div></div><div class="hbar-val">3</div></div>
+        <div class="hbar-row"><div class="hbar-label">Food Science</div><div class="hbar-track"><div class="hbar-fill" style="width:50%;background:var(--science)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label">Chemistry</div><div class="hbar-track"><div class="hbar-fill" style="width:25%;background:var(--science)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Computer Science</div><div class="hbar-track"><div class="hbar-fill" style="width:25%;background:var(--science)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Nutrition, Exercise &amp; Sports</div><div class="hbar-track"><div class="hbar-fill" style="width:25%;background:var(--science)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Niels Bohr Institute</div><div class="hbar-track"><div class="hbar-fill" style="width:25%;background:var(--science)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">5 other depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--ssh)">SSH / Law / Theo &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">0 IDFs</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">All depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PoC Applications -->
+  <div class="ind-sep">PoC Applications · Q1 2026 <span class="ind-badge">UCPH total: 24</span></div>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-title" style="color:var(--sund)">Health &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">11 apps</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label">Drug Design &amp; Pharm.</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--sund)"></div></div><div class="hbar-val">4</div></div>
+        <div class="hbar-row"><div class="hbar-label">reNEW</div><div class="hbar-track"><div class="hbar-fill" style="width:50%;background:var(--sund)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label">Biomedical Sciences</div><div class="hbar-track"><div class="hbar-fill" style="width:25%;background:var(--sund)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Pharmacy</div><div class="hbar-track"><div class="hbar-fill" style="width:25%;background:var(--sund)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Public Health</div><div class="hbar-track"><div class="hbar-fill" style="width:25%;background:var(--sund)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Vet. &amp; Animal Sciences</div><div class="hbar-track"><div class="hbar-fill" style="width:25%;background:var(--sund)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">CBMR</div><div class="hbar-track"><div class="hbar-fill" style="width:25%;background:var(--sund)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">11 other depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--science)">Science &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">8 apps</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label">Plant &amp; Env. Sciences</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--science)"></div></div><div class="hbar-val">4</div></div>
+        <div class="hbar-row"><div class="hbar-label">Biology</div><div class="hbar-track"><div class="hbar-fill" style="width:50%;background:var(--science)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label">Chemistry</div><div class="hbar-track"><div class="hbar-fill" style="width:50%;background:var(--science)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">9 other depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--ssh)">SSH / Law / Theo &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">5 apps</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label">CIP</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--hum)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Cross-Cultural Studies</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--hum)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">English Germanic &amp; Romance</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--hum)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">The Saxo Institute</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--hum)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Faculty of Law</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--law)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">10 other depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PoC Funded -->
+  <div class="ind-sep">PoC Funded Grants · Q1 2026 <span class="ind-badge">UCPH total: 20</span></div>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-title" style="color:var(--sund)">Health &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">8 funded</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label">Drug Design &amp; Pharm.</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--sund)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label">reNEW</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--sund)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label">Biomedical Sciences</div><div class="hbar-track"><div class="hbar-fill" style="width:50%;background:var(--sund)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Pharmacy</div><div class="hbar-track"><div class="hbar-fill" style="width:50%;background:var(--sund)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Public Health</div><div class="hbar-track"><div class="hbar-fill" style="width:50%;background:var(--sund)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Vet. &amp; Animal Sciences</div><div class="hbar-track"><div class="hbar-fill" style="width:50%;background:var(--sund)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">12 other depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--science)">Science &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">7 funded</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label">Plant &amp; Env. Sciences</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--science)"></div></div><div class="hbar-val">4</div></div>
+        <div class="hbar-row"><div class="hbar-label">Chemistry</div><div class="hbar-track"><div class="hbar-fill" style="width:50%;background:var(--science)"></div></div><div class="hbar-val">2</div></div>
+        <div class="hbar-row"><div class="hbar-label">Biology</div><div class="hbar-track"><div class="hbar-fill" style="width:25%;background:var(--science)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">9 other depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--ssh)">SSH / Law / Theo &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">5 funded</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label">CIP</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--hum)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Cross-Cultural Studies</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--hum)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">English Germanic &amp; Romance</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--hum)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">The Saxo Institute</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--hum)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label">Faculty of Law</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--law)"></div></div><div class="hbar-val">1</div></div>
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">10 other depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Licences -->
+  <div class="ind-sep">Licences signed · Q1 2026 <span class="ind-badge ind-badge watch">UCPH total: 2</span></div>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-title" style="color:var(--sund)">Health &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">2 licences</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">All depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+      <p style="font-size:10px;color:var(--soft);margin-top:8px">2 licences recorded at faculty level. Not allocated to specific departments in the DEP sheet.</p>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--science)">Science &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">0 licences</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">All depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--ssh)">SSH / Law / Theo &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">0 licences</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">All depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spin-outs -->
+  <div class="ind-sep">Spin-outs formed · Q1 2026 <span class="ind-badge ind-badge watch">UCPH total: 0</span></div>
+  <div class="three-col">
+    <div class="card">
+      <div class="card-title" style="color:var(--sund)">Health &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">0</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">All depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--science)">Science &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">0</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">All depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--ssh)">SSH / Law / Theo &nbsp;<span style="color:var(--soft);font-weight:400;text-transform:none;letter-spacing:0;font-size:10px">0</span></div>
+      <div class="hbar-chart">
+        <div class="hbar-row"><div class="hbar-label" style="font-style:italic;color:var(--soft)">All depts</div><div class="hbar-track"></div><div class="hbar-val soft">0</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div><!-- end body-wrap -->
+
+<div class="body-wrap">
+<div class="footer">
+  <p style="text-align:center">
+    UCPH Lighthouse &nbsp;·&nbsp; Q1 2026 Quarterly Report &nbsp;·&nbsp; For internal use<br>
+    &copy; UCPH Lighthouse
+  </p>
+</div>
+</div>
+</body>
+</html>
